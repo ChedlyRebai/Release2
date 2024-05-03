@@ -37,3 +37,16 @@ export const getAppreciation = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
+
+
+export const gethrdv = async (req: Request, res: Response) => {
+    try {
+        const hr = await db.h_rdv.findMany();
+        return res.status(StatusCodes.OK).json(hr);
+    } catch (error) {
+        console.error(error);
+        res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
+    }
+    }
