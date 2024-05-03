@@ -1,4 +1,4 @@
-import { Result } from "./../../node_modules/arg/index.d";
+import { Result } from "arg";
 import { Request, Response } from "express";
 
 
