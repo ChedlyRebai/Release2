@@ -607,83 +607,69 @@ model v_client_recouv {
 }
 
 model suivi_agenda {
-  aff                                                                 String?               @db.VarChar
-  agc                                                                 String?               @db.VarChar
-  cli                                                                 BigInt?               @unique
-  eng                                                                 String?               @db.VarChar
-  ges                                                                 String?               @db.VarChar
-  num                                                                 Decimal?              @db.Decimal(38, 9)
-  ref                                                                 Decimal?              @db.Decimal(38, 9)
-  lieu                                                                String?               @db.VarChar
-  sort                                                                String?               @db.VarChar
-  taux                                                                String?               @db.VarChar
-  objet                                                               String?               @db.VarChar
-  date_l                                                              DateTime?             @db.Date
-  nature                                                              String?               @db.VarChar
-  dat_rec                                                             DateTime?             @db.Date
-  date_ag                                                             DateTime?             @db.Date
-  usr_nom                                                             String?               @db.VarChar
-  date_rdv                                                            DateTime?             @db.Date
-  mnt_plan                                                            Decimal?              @db.Decimal(38, 9)
-  nouv_fax                                                            String?               @db.VarChar
-  type_rdv                                                            String?               @db.VarChar
-  date_motif                                                          DateTime?             @db.Date
-  info_motif                                                          String?               @db.VarChar
-  date_action                                                         DateTime?             @db.Date
-  date_lettre                                                         DateTime?             @db.Date
-  type_lettre                                                         String?               @db.VarChar
-  compte_rendu                                                        String?               @db.VarChar
-  code_fonction                                                       BigInt?
-  matricule_rdv                                                       String?               @db.VarChar
-  usr_matricule                                                       String?               @db.VarChar
-  versement_prealable                                                 Decimal?              @db.Decimal(38, 9)
-  id                                                                  Int                   @id @unique(map: "unique_suiviagenda") @default(autoincrement())
-  visiteId                                                            Int?                  @unique
-  facilitePaimentId                                                   Int?                  @unique
-  nonreconaissanceId                                                  Int?                  @unique
-  nouvellecoordonneesId                                               Int?                  @unique
-  promesseregresseId                                                  Int?                  @unique
-  clientInjoignableId                                                 Int?                  @unique
-  app_genId                                                           Int?                  @unique
-  motifimpId                                                          Int?                  @unique
-  liste_choixId                                                       Int?                  @unique
-  created_at                                                          DateTime?             @default(now()) @db.Timestamp(6)
-  updated_at                                                          DateTime?             @default(now()) @db.Timestamp(6)
-  FacilitePaiment_FacilitePaiment_suiviagendaidTosuivi_agenda         FacilitePaiment[]     @relation("FacilitePaiment_suiviagendaidTosuivi_agenda")
-  nonreconaissance_nonreconaissance_suiviagendaidTosuivi_agenda       nonreconaissance[]    @relation("nonreconaissance_suiviagendaidTosuivi_agenda")
-  nouvellecoordonnees_nouvellecoordonnees_suiviagendaidTosuivi_agenda nouvellecoordonnees[] @relation("nouvellecoordonnees_suiviagendaidTosuivi_agenda")
-  promesseregresse_promesseregresse_suiviagendaidTosuivi_agenda       promesseregresse[]    @relation("promesseregresse_suiviagendaidTosuivi_agenda")
-  appreciation                                                        appreciation?         @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  clientInjoignable                                                   clientInjoignable?    @relation(fields: [clientInjoignableId], references: [id])
-  FacilitePaiment                                                     FacilitePaiment?      @relation(fields: [facilitePaimentId], references: [id])
-  listechoix                                                          listechoix?           @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  motifimp                                                            motifimp?             @relation(fields: [motifimpId], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  nonreconaissance                                                    nonreconaissance?     @relation(fields: [nonreconaissanceId], references: [id])
-  nouvellecoordonnees                                                 nouvellecoordonnees?  @relation(fields: [nouvellecoordonneesId], references: [id])
-  promesseregresse                                                    promesseregresse?     @relation(fields: [promesseregresseId], references: [id])
-  visite                                                              visite?               @relation(fields: [visiteId], references: [id])
+  aff                                                         String?           @db.VarChar
+  agc                                                         String?           @db.VarChar
+  cli                                                         BigInt?
+  eng                                                         String?           @db.VarChar
+  ges                                                         String?           @db.VarChar
+  num                                                         Decimal?          @db.Decimal(38, 9)
+  ref                                                         Decimal?          @db.Decimal(38, 9)
+  lieu                                                        String?           @db.VarChar
+  sort                                                        String?           @db.VarChar
+  taux                                                        String?           @db.VarChar
+  objet                                                       String?           @db.VarChar
+  date_l                                                      DateTime?         @db.Date
+  nature                                                      String?           @db.VarChar
+  dat_rec                                                     DateTime?         @db.Date
+  date_ag                                                     DateTime?         @db.Date
+  usr_nom                                                     String?           @db.VarChar
+  date_rdv                                                    DateTime?         @db.Date
+  mnt_plan                                                    Decimal?          @db.Decimal(38, 9)
+  nouv_fax                                                    String?           @db.VarChar
+  type_rdv                                                    String?           @db.VarChar
+  date_motif                                                  DateTime?         @db.Date
+  info_motif                                                  String?           @db.VarChar
+  date_action                                                 DateTime?         @db.Date
+  date_lettre                                                 DateTime?         @db.Date
+  type_lettre                                                 String?           @db.VarChar
+  compte_rendu                                                String?           @db.VarChar
+  code_fonction                                               BigInt?
+  matricule_rdv                                               String?           @db.VarChar
+  usr_matricule                                               String?           @db.VarChar
+  versement_prealable                                         Decimal?          @db.Decimal(38, 9)
+  id                                                          Int               @id @unique(map: "unique_suiviagenda") @default(autoincrement())
+  app_genId                                                   Int?              @unique
+  motifimpId                                                  Int?              @unique
+  liste_choixId                                               Int?              @unique
+  created_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
+  comptretypeid                                               Int?
+  compterendutype_compterendutype_compterenduidTosuivi_agenda compterendutype[] @relation("compterendutype_compterenduidTosuivi_agenda")
+  appreciation                                                appreciation?     @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  compterendutype_suivi_agenda_comptretypeidTocompterendutype compterendutype?  @relation("suivi_agenda_comptretypeidTocompterendutype", fields: [comptretypeid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listechoix                                                  listechoix?       @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  motifimp                                                    motifimp?         @relation(fields: [motifimpId], references: [code], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model visite {
-  id                        Int           @id @unique(map: "unique_visite") @default(autoincrement())
-  date_visite               DateTime?     @db.Date
-  lieu_visite               String?       @db.VarChar
+  id                        Int               @id @unique(map: "unique_visite") @default(autoincrement())
+  date_visite               DateTime?         @db.Date
+  lieu_visite               String?           @db.VarChar
   h_rdv                     Int?
-  suivi_agenda              suivi_agenda?
-  h_rdv_visite_h_rdvToh_rdv h_rdv?        @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  compterendutype           compterendutype[]
+  h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model FacilitePaiment {
-  id                                                       Int               @id @unique(map: "unique_facilitepaiement") @default(autoincrement())
-  nb_ech                                                   Decimal?          @db.Decimal(38, 9)
-  mnt_rec                                                  Decimal?          @db.Decimal(38, 9)
-  lieu_rec                                                 String?           @db.VarChar
-  suiviagendaid                                            Int?
-  created_at                                               DateTime?         @default(now()) @db.Timestamp(6)
-  updated_at                                               DateTime?         @default(now()) @db.Timestamp(6)
-  suivi_agenda_FacilitePaiment_suiviagendaidTosuivi_agenda suivi_agenda?     @relation("FacilitePaiment_suiviagendaidTosuivi_agenda", fields: [suiviagendaid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  montantFacilites                                         montantfacilite[] @relation("FacilitePaimentId")
-  suivi_agenda                                             suivi_agenda?
+  id               Int               @id @unique(map: "unique_facilitepaiement") @default(autoincrement())
+  nb_ech           Decimal?          @db.Decimal(38, 9)
+  mnt_rec          Decimal?          @db.Decimal(38, 9)
+  lieu_rec         String?           @db.VarChar
+  suiviagendaid    Int?
+  created_at       DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?         @default(now()) @db.Timestamp(6)
+  compterendutype  compterendutype[]
+  montantFacilites montantfacilite[] @relation("FacilitePaimentId")
 }
 
 model montantfacilite {
@@ -695,39 +681,35 @@ model montantfacilite {
 }
 
 model nonreconaissance {
-  id                                                        Int           @id @unique(map: "unique_nonreconnai") @default(autoincrement())
-  observation                                               String?       @db.VarChar
-  suiviagendaid                                             Int?
-  suivi_agenda_nonreconaissance_suiviagendaidTosuivi_agenda suivi_agenda? @relation("nonreconaissance_suiviagendaidTosuivi_agenda", fields: [suiviagendaid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agenda                                              suivi_agenda?
+  id            Int     @id @unique(map: "unique_nonreconnai") @default(autoincrement())
+  observation   String? @db.VarChar
+  suiviagendaid Int?
 }
 
 model nouvellecoordonnees {
-  id                                                           Int           @id @unique(map: "nouvelle") @default(autoincrement())
-  nouv_te2                                                     String?       @db.VarChar
-  nouv_tel                                                     String?       @db.VarChar
-  nouv_adresse                                                 String?       @db.VarChar
-  suiviagendaid                                                Int?
-  suivi_agenda_nouvellecoordonnees_suiviagendaidTosuivi_agenda suivi_agenda? @relation("nouvellecoordonnees_suiviagendaidTosuivi_agenda", fields: [suiviagendaid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agenda                                                 suivi_agenda?
+  id              Int               @id @unique(map: "nouvelle") @default(autoincrement())
+  nouv_te2        String?           @db.VarChar
+  nouv_tel        String?           @db.VarChar
+  nouv_adresse    String?           @db.VarChar
+  suiviagendaid   Int?
+  compterendutype compterendutype[]
 }
 
 model promesseregresse {
-  id                                                        Int           @id @unique(map: "uniquepromesse") @default(autoincrement())
-  mnt_reg                                                   Decimal?      @db.Decimal(38, 9)
-  date_ver                                                  DateTime?     @db.Date
-  lieu_ver                                                  String?       @db.VarChar
-  suiviagendaid                                             Int?
-  suivi_agenda_promesseregresse_suiviagendaidTosuivi_agenda suivi_agenda? @relation("promesseregresse_suiviagendaidTosuivi_agenda", fields: [suiviagendaid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agenda                                              suivi_agenda?
+  id              Int               @id @unique(map: "uniquepromesse") @default(autoincrement())
+  mnt_reg         Decimal?          @db.Decimal(38, 9)
+  date_ver        DateTime?         @db.Date
+  lieu_ver        String?           @db.VarChar
+  suiviagendaid   Int?
+  compterendutype compterendutype[]
 }
 
 model clientInjoignable {
-  id           Int           @id @unique(map: "uniqueclient") @default(autoincrement())
-  mnt_reg      Decimal?      @db.Decimal(38, 9)
-  date_ver     DateTime?     @db.Date
-  lieu_ver     String?       @db.VarChar
-  suivi_agenda suivi_agenda?
+  id              Int               @id @unique(map: "uniqueclient") @default(autoincrement())
+  mnt_reg         Decimal?          @db.Decimal(38, 9)
+  date_ver        DateTime?         @db.Date
+  lieu_ver        String?           @db.VarChar
+  compterendutype compterendutype[]
 }
 
 model appreciation {
@@ -750,7 +732,7 @@ model listechoix {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Proc {
-  codenv     BigInt    @id @unique @default(autoincrement())
+  codenv     Int       @id @default(autoincrement())
   libelle    String    @db.VarChar
   created_at DateTime? @default(now()) @db.Timestamp(6)
 }
@@ -867,6 +849,35 @@ model ab_param {
   montant_lettre Decimal? @db.Decimal(15, 3)
   acces          String?  @db.VarChar(1)
   libelle_code   String?  @db.VarChar(100)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model compterendutype {
+  id                                                       Int                  @id @unique @default(autoincrement())
+  created_at                                               DateTime             @default(now()) @db.Timestamptz(6)
+  compterenduid                                            Int?
+  visiteId                                                 Int?
+  facilitePaimentId                                        Int?
+  ClientInjoignableId                                      Int?
+  nouvellecoordonneesID                                    Int?
+  promesseregresseID                                       Int?
+  typeID                                                   Int?
+  clientInjoignable                                        clientInjoignable?   @relation(fields: [ClientInjoignableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  suivi_agenda_compterendutype_compterenduidTosuivi_agenda suivi_agenda?        @relation("compterendutype_compterenduidTosuivi_agenda", fields: [compterenduid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  FacilitePaiment                                          FacilitePaiment?     @relation(fields: [facilitePaimentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nouvellecoordonnees                                      nouvellecoordonnees? @relation(fields: [nouvellecoordonneesID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  promesseregresse                                         promesseregresse?    @relation(fields: [promesseregresseID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  types                                                    types?               @relation(fields: [typeID], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  visite                                                   visite?              @relation(fields: [visiteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  suivi_agenda_suivi_agenda_comptretypeidTocompterendutype suivi_agenda[]       @relation("suivi_agenda_comptretypeidTocompterendutype")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model types {
+  code            Int               @id @unique(map: "types_codeType_key") @default(autoincrement())
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  libelle         String?
+  compterendutype compterendutype[]
 }
 
 enum role {

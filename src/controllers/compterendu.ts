@@ -82,37 +82,36 @@ export const getHistoriqueCompteRendu = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
-
 export const createCompteRendu = async (req: Request, res: Response) => {
   try {
-    // const { cli, date_ag, num,compte_rendu, usr_nom, usrmatricule } = req.body;
-    const { user, suiviAgenda, compteRendu, cli } = req.body;
+    const { user, suiviAgenda, compteRendu, cli, clientInjoignableId } = req.body;
 
+    // Fetching the number of existing suivi_agenda entries for the specified client
     const num = await db.suivi_agenda.count({
       where: {
         cli: cli,
       },
     });
 
+    // Creating the new compterendu entry
     const newCompteRendu = await db.suivi_agenda.create({
       data: {
-        id: num + 1,
-        num: num + 1,
+        // Assuming id is autoincremented and unique, you don't need to specify it
+        num: num + 1, // Incrementing num
         cli: cli,
-        date_action: new Date().toISOString(),
-        date_ag: new Date(),
+        date_ag: new Date(), // Assuming you want the current date
         compte_rendu: compteRendu,
         usr_nom: user.role,
         usr_matricule: user.matricule,
+        
       },
     });
+
     console.log(newCompteRendu);
-    return res.status(StatusCodes.OK).type("json").send(json(newCompteRendu));
+    return res.status(StatusCodes.OK).json(newCompteRendu);
   } catch (error) {
     console.error(error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" });
   }
 };
 
@@ -152,3 +151,16 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
+
+
+export const getcompterendutypes = async (req: Request, res: Response) => { 
+  try {
+    const compterendutypes = await db.types.findMany();
+    return res.status(StatusCodes.OK).type("json").send(json(compterendutypes));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+}
