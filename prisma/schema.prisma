@@ -657,7 +657,7 @@ model visite {
   lieu_visite               String?           @db.VarChar
   h_rdv                     Int?
   compterendutype           compterendutype[]
-  h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [code], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model FacilitePaiment {
@@ -738,10 +738,9 @@ model Proc {
 }
 
 model h_rdv {
-  codenv                     Int       @id @unique @default(autoincrement())
-  libelle                    String    @db.VarChar
-  created_at                 DateTime? @default(now()) @db.Timestamp(6)
-  visite_visite_h_rdvToh_rdv visite[]  @relation("visite_h_rdvToh_rdv")
+  code                       Int      @id @unique(map: "h_rdv_codenv_key") @default(autoincrement())
+  libelle                    String   @db.VarChar
+  visite_visite_h_rdvToh_rdv visite[] @relation("visite_h_rdvToh_rdv")
 }
 
 model ab_compte {
@@ -851,7 +850,6 @@ model ab_param {
   libelle_code   String?  @db.VarChar(100)
 }
 
-
 model compterendutype {
   id                                                       Int                  @id @unique @default(autoincrement())
   created_at                                               DateTime             @default(now()) @db.Timestamptz(6)
@@ -867,15 +865,13 @@ model compterendutype {
   FacilitePaiment                                          FacilitePaiment?     @relation(fields: [facilitePaimentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nouvellecoordonnees                                      nouvellecoordonnees? @relation(fields: [nouvellecoordonneesID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   promesseregresse                                         promesseregresse?    @relation(fields: [promesseregresseID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  types                                                    types?               @relation(fields: [typeID], references: [codeType], onDelete: NoAction, onUpdate: NoAction)
+  types                                                    types?               @relation(fields: [typeID], references: [code], onDelete: NoAction, onUpdate: NoAction)
   visite                                                   visite?              @relation(fields: [visiteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   suivi_agenda_suivi_agenda_comptretypeidTocompterendutype suivi_agenda[]       @relation("suivi_agenda_comptretypeidTocompterendutype")
 }
 
-
 model types {
-  codeType        Int               @id @unique @default(autoincrement())
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  code            Int               @id @unique(map: "types_codeType_key") @default(autoincrement())
   libelle         String?
   compterendutype compterendutype[]
 }
