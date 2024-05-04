@@ -657,7 +657,7 @@ model visite {
   lieu_visite               String?           @db.VarChar
   h_rdv                     Int?
   compterendutype           compterendutype[]
-  h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [code], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model FacilitePaiment {
@@ -738,7 +738,7 @@ model Proc {
 }
 
 model h_rdv {
-  codenv                     Int       @id @unique @default(autoincrement())
+  code                       Int       @id @unique(map: "h_rdv_codenv_key") @default(autoincrement())
   libelle                    String    @db.VarChar
   created_at                 DateTime? @default(now()) @db.Timestamp(6)
   visite_visite_h_rdvToh_rdv visite[]  @relation("visite_h_rdvToh_rdv")
