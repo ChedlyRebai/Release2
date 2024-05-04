@@ -40,7 +40,6 @@ model Utilisateur {
   updated_at      DateTime?           @default(now()) @db.Timestamp(6)
   comptes         Compte[]
   fonction        fonction            @relation(fields: [code_fonction], references: [code_fonction], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agendas   suivi_agenda[]
   client_recouv   v_client_recouv?
   obsClients      ImpObstransclient[] @relation("ObsClients")
 }
@@ -610,7 +609,7 @@ model v_client_recouv {
 model suivi_agenda {
   aff                                                                 String?               @db.VarChar
   agc                                                                 String?               @db.VarChar
-  cli                                                                 String?               @db.VarChar
+  cli                                                                 BigInt?               @unique
   eng                                                                 String?               @db.VarChar
   ges                                                                 String?               @db.VarChar
   num                                                                 Decimal?              @db.Decimal(38, 9)
@@ -648,7 +647,6 @@ model suivi_agenda {
   app_genId                                                           Int?                  @unique
   motifimpId                                                          Int?                  @unique
   liste_choixId                                                       Int?                  @unique
-  utilsateurId                                                        Int?
   created_at                                                          DateTime?             @default(now()) @db.Timestamp(6)
   updated_at                                                          DateTime?             @default(now()) @db.Timestamp(6)
   FacilitePaiment_FacilitePaiment_suiviagendaidTosuivi_agenda         FacilitePaiment[]     @relation("FacilitePaiment_suiviagendaidTosuivi_agenda")
@@ -663,7 +661,6 @@ model suivi_agenda {
   nonreconaissance                                                    nonreconaissance?     @relation(fields: [nonreconaissanceId], references: [id])
   nouvellecoordonnees                                                 nouvellecoordonnees?  @relation(fields: [nouvellecoordonneesId], references: [id])
   promesseregresse                                                    promesseregresse?     @relation(fields: [promesseregresseId], references: [id])
-  utilisateur                                                         Utilisateur?          @relation(fields: [utilsateurId], references: [id])
   visite                                                              visite?               @relation(fields: [visiteId], references: [id])
 }
 

@@ -7,8 +7,8 @@ import { json } from "../../public/utils";
 export default json;
 export const getCompterendu = async (req: Request, res: Response) => {
   try {
-    const cli = String(req.query.cli);
-    const client = await db.v_client_recouv.findFirst({
+    const cli = Number(req.query.cli);
+    const client = await db.suivi_agenda.findFirst({
       where: {
         cli: cli,
       },
@@ -60,7 +60,7 @@ export const getListCompte = async (req: Request, res: Response) => {
 
 export const getHistoriqueCompteRendu = async (req: Request, res: Response) => {
   try {
-    const cli = String(req.query.cli);
+    const cli = Number(req.query.cli);
     const listHistorique = await db.suivi_agenda.findMany({
       where: {
         cli: cli,

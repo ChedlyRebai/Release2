@@ -8,7 +8,7 @@ import { createCompteRendu, getCompteRenduById, getCompterendu, getHistoriqueCom
 const router: Router = express.Router();
 
 
-router.get("/compteRendu",getCompterendu)
+router.get("/getcompterendu",getCompterendu)
 router.post("/createcompterendu",createCompteRendu);
 router.get("/getbyid/:id",getCompteRenduById)
 export default router;
