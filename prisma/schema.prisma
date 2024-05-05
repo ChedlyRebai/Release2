@@ -69,6 +69,7 @@ model Agence {
   Compte    Compte[]
   ab_client ab_client[]
   ab_compte ab_compte[]
+  visite    visite[]
 }
 
 model Compte {
@@ -654,10 +655,11 @@ model suivi_agenda {
 model visite {
   id                        Int               @id @unique(map: "unique_visite") @default(autoincrement())
   date_visite               DateTime?         @db.Date
-  lieu_visite               String?           @db.VarChar
+  lieu_visite               Int?
   h_rdv                     Int?
   compterendutype           compterendutype[]
   h_rdv_visite_h_rdvToh_rdv h_rdv?            @relation("visite_h_rdvToh_rdv", fields: [h_rdv], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  Agence                    Agence?           @relation(fields: [lieu_visite], references: [codug], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model FacilitePaiment {
@@ -681,9 +683,10 @@ model montantfacilite {
 }
 
 model nonreconaissance {
-  id            Int     @id @unique(map: "unique_nonreconnai") @default(autoincrement())
-  observation   String? @db.VarChar
-  suiviagendaid Int?
+  id              Int               @id @unique(map: "unique_nonreconnai") @default(autoincrement())
+  observation     String?           @db.VarChar
+  suiviagendaid   Int?
+  compterendutype compterendutype[]
 }
 
 model nouvellecoordonnees {
@@ -705,7 +708,7 @@ model promesseregresse {
 }
 
 model clientInjoignable {
-  id              Int               @id @unique(map: "uniqueclient") @default(autoincrement())
+  id              Int               @id @unique @default(autoincrement())
   lieu_ver        String?           @db.VarChar
   compterendutype compterendutype[]
 }
@@ -858,9 +861,11 @@ model compterendutype {
   nouvellecoordonneesID                                    Int?
   promesseregresseID                                       Int?
   typeID                                                   Int?
+  nonReconnaissanceID                                      Int?
   clientInjoignable                                        clientInjoignable?   @relation(fields: [ClientInjoignableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   suivi_agenda_compterendutype_compterenduidTosuivi_agenda suivi_agenda?        @relation("compterendutype_compterenduidTosuivi_agenda", fields: [compterenduid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   FacilitePaiment                                          FacilitePaiment?     @relation(fields: [facilitePaimentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nonreconaissance                                         nonreconaissance?    @relation(fields: [nonReconnaissanceID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nouvellecoordonnees                                      nouvellecoordonnees? @relation(fields: [nouvellecoordonneesID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   promesseregresse                                         promesseregresse?    @relation(fields: [promesseregresseID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   types                                                    types?               @relation(fields: [typeID], references: [code], onDelete: NoAction, onUpdate: NoAction)

@@ -3,18 +3,44 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { db } from "../../prisma/db";
 import { json } from "../../public/utils";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Console } from "console";
+import { montantfacilite } from "@prisma/client";
 
-export default json;
+
 export const getCompterendu = async (req: Request, res: Response) => {
   try {
     const cli = Number(req.query.cli);
-    const client = await db.suivi_agenda.findFirst({
+    const client = await db.suivi_agenda.findMany({
       where: {
         cli: cli,
       },
+      select:{
+        id:true,
+        cli:true,
+        compte_rendu:true,
+         compterendutype_suivi_agenda_comptretypeidTocompterendutype:{
+          select:{
+            typeID:true,
+            clientInjoignable: true,
+            promesseregresseID:true,
+            visite:true,
+            FacilitePaiment:true,
+            nonreconaissance:true,
+            nouvellecoordonnees:true,
+          }
+         },
+        compterendutype_compterendutype_compterenduidTosuivi_agenda:{
+          select:{
+            typeID:true,
+            types:true,
+          }
+        },
+      },
     });
+    
+    
 
-    //res.status(200).type("json").send(json(users))
 
     console.log(client);
     return res.status(StatusCodes.OK).type("json").send(json(client));
@@ -85,7 +111,7 @@ export const getHistoriqueCompteRendu = async (req: Request, res: Response) => {
 
 export const createCompteRendu = async (req: Request, res: Response) => {
   try {
-    const { type,user, mnt_reg,observation,suiviAgenda, compteRendu, cli, clientInjoignableId } = req.body;
+    const { type, mnt_reg,observation,suiviAgenda, compteRendu, cli, clientInjoignableId } = req.body;
     
     // Fetching the number of existing suivi_agenda entries for the specified client
     // const num = await db.suivi_agenda.count({
@@ -107,11 +133,13 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         
     //   },
     // });
+    const token = req.headers.authorization as string;
+    const user = jwt.decode(token) as JwtPayload;
     const conmpterendutypes = await db.types.findMany();
-      
+    console.log(user)
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
-        id: 10,
+        id:req.body.id,
         num: 1,
         cli: cli,
         date_ag: new Date(),
@@ -127,19 +155,20 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           mnt_reg: mnt_reg,
           lieu_ver: req.body.lieu_ver,
           date_ver: req.body.date_ver,
-          suiviagendaid:2
+          suiviagendaid:nouvelleCompteRendu.id
         },
       });
+      
 
       const compterendutype=await db.compterendutype.create({
         data:{
           compterenduid:nouvelleCompteRendu.id,
-          nouvellecoordonneesID:promesse.id,
+          promesseregresseID:promesse.id,
           typeID:1
         }
       })
 
-      return res.status(StatusCodes.OK).json(promesse);
+      return res.status(StatusCodes.OK).json({promesse,compterendutype});
 
     }
     console.log(type)
@@ -149,7 +178,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           nouv_te2: req.body.nouv_te2,
           nouv_tel: req.body.nouv_tel,
           nouv_adresse: req.body.nouv_adresse,
-          suiviagendaid:1
+          suiviagendaid:nouvelleCompteRendu.id
         },
       });
       const compterendutype=await db.compterendutype.create({
@@ -164,11 +193,34 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     }
 
     if(type==3){
-      const facilitePaiment = await db.facilitePaiment.create({
+      const newFacilitePaiment = await prisma.facilitePaiment.create({
         data: {
-
+          nb_ech: req.body.nb_ech,
+          mnt_rec: req.body.mnt_rec,
+          lieu_rec: req.body.lieu_rec,
+          suiviagendaid:nouvelleCompteRendu.id,
         },
       });
+
+      const montantFacilites = req.body.montantFacilites;
+
+      await Promise.all(montantFacilites.map(async (montantFacilite:montantfacilite) => {
+        console.log(montantFacilite);
+        await prisma.montantfacilite.create({
+          data: {
+            ...montantFacilite,
+            facilitePaimentId: newFacilitePaiment.id,
+          },
+        });
+      }));
+
+      const compterendutype=await db.compterendutype.create({
+        data:{
+          compterenduid:nouvelleCompteRendu.id,
+          facilitePaimentId:newFacilitePaiment.id,
+          typeID:2
+        }
+      })
     }
 
     if(type==4){
@@ -180,10 +232,11 @@ export const createCompteRendu = async (req: Request, res: Response) => {
       const compterendutype=await db.compterendutype.create({
         data:{
           compterenduid:nouvelleCompteRendu.id,
-          nouvellecoordonneesID:nonreconaissance.id,
+          nonReconnaissanceID:nonreconaissance.id,
           typeID:4
         }
       })
+      return res.status(StatusCodes.OK).json(compterendutype);
     }
 
     if(type==5){
@@ -198,18 +251,27 @@ export const createCompteRendu = async (req: Request, res: Response) => {
       const compterendutype=await db.compterendutype.create({
         data:{
           compterenduid:nouvelleCompteRendu.id,
-          nouvellecoordonneesID:visite.id,
+          visiteId:visite.id,
           typeID:5
         }
       })
+      return res.status(StatusCodes.OK).json(visite);
     }
 
     if(type==6){
       const clientInjoignable = await db.clientInjoignable.create({
         data: {
-          
+          lieu_ver: "lieu_ver",
         },
       });
+      const compterendutype=await db.compterendutype.create({
+        data:{
+          compterenduid:nouvelleCompteRendu.id,
+          ClientInjoignableId:clientInjoignable.id,
+          typeID:5
+        }
+      })
+      return res.status(StatusCodes.OK).json(clientInjoignable);
 
     }
 
