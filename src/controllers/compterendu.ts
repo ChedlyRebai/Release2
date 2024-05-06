@@ -556,13 +556,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
         },
       },
     });
-    console.log(
-      "**********************************************************************************"
-    );
-    console.log(CompteRendu);
-    console.log(
-      "**********************************************************************************"
-    );
+
     return res
       .status(StatusCodes.OK)
       .type("json")
