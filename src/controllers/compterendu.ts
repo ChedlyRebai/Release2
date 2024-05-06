@@ -142,6 +142,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         compte_rendu: compteRendu,
         usr_nom: user.role,
         usr_matricule: user.matricule,
+        
       },
     });
     if (type == 1) {
@@ -373,6 +374,14 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
           cli: true,
           compte_rendu: true,
           usr_nom: true,
+          
+          ab_client:{
+            select:{
+              id: true,
+              nom: true,
+              cli: true,
+            }
+          },
 
           compterendutype_compterendutype_compterenduidTosuivi_agenda: {
             select: {
@@ -421,6 +430,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
                   nouv_adresse: true,
                 },
               },
+              
 
               nouvellecoordonneesID: true,
               facilitePaimentId: true,
@@ -458,38 +468,19 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
       where: {
         id,
       },
-      // select: {
-      //   num: true,
-      //   motifimp: {
-      //     select:{
-      //       code: true,
-      //       libelle: true,
-      //     }
-      //   },
-      //   compterendutype_compterendutype_compterenduidTosuivi_agenda:{
-      //     select:{
-      //       typeID:true,
-      //       types:true,
-      //     }
-
-      //   },
-      //   motifimpId: true,
-      //   date_motif: true,
-      //   info_motif: true,
-      //   date_ag: true,
-      //   compte_rendu: true,
-      //   usr_nom: true,
-      //   id: true,
-      //   date_action: true,
-      //   usr_matricule: true,
-      //  },
+      
       select: {
         created_at: true,
         id: true,
         cli: true,
         compte_rendu: true,
         usr_nom: true,
-
+        ab_client:{
+          select:{
+            nom: true,
+            cli: true,
+          }
+        },
         compterendutype_compterendutype_compterenduidTosuivi_agenda: {
           select: {
             typeID: true,
@@ -537,7 +528,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
                 nouv_adresse: true,
               },
             },
-
+            
             nouvellecoordonneesID: true,
             facilitePaimentId: true,
             FacilitePaiment: {
@@ -560,6 +551,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
                 observation: true,
               },
             },
+            
           },
         },
       },
@@ -599,7 +591,7 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
       usr_nom: true,
       compterendutype_compterendutype_compterenduidTosuivi_agenda: {
         select: {
-
+          
           typeID: true,
           types: true,
           clientInjoignable: {
@@ -614,6 +606,7 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
               date_ver: true,
             },
           },
+          
           ClientInjoignableId: true,
           promesseregresseID: true,
           visite: {
@@ -663,6 +656,13 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
               observation: true,
             },
           },
+          ab_client: {
+            select: {
+              nom: true,
+              cli: true,
+  
+            },
+          },
 
 
         },
@@ -670,9 +670,7 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
     };
 
     const CompteRendu:any = await db.suivi_agenda.findMany({
-      select: {
-        
-      },
+      select: selectedfields,
       skip: perPage * (page - 1),
       take: perPage,
     });
