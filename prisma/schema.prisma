@@ -182,221 +182,222 @@ model VTRF {
 }
 
 model ab_client {
-  fc                        String?   @db.VarChar(1)
-  sd                        Decimal?  @db.Decimal(15, 3)
-  act                       String?   @db.VarChar(20)
+  fc                        String?        @db.VarChar(1)
+  sd                        Decimal?       @db.Decimal(15, 3)
+  act                       String?        @db.VarChar(20)
   cli                       BigInt
-  nom                       String?   @db.VarChar(100)
-  obs                       String?   @db.VarChar(1000)
-  seg                       String?   @db.VarChar(20)
-  tel                       String?   @db.VarChar(200)
-  trt                       String?   @db.VarChar(2)
-  catl                      String?   @db.VarChar(20)
-  mott                      String?   @db.VarChar(2)
-  sort                      String?   @db.VarChar(2)
-  tel1                      String?   @db.VarChar(40)
-  tel2                      String?   @db.VarChar(40)
-  tel3                      String?   @db.VarChar(40)
-  motif                     String?   @db.VarChar(1000)
-  phase                     String?   @db.VarChar(3)
-  trf_a                     String?   @db.VarChar(1)
-  trf_c                     String?   @db.VarChar(1)
-  trt_d                     String?   @db.VarChar(1)
+  nom                       String?        @db.VarChar(100)
+  obs                       String?        @db.VarChar(1000)
+  seg                       String?        @db.VarChar(20)
+  tel                       String?        @db.VarChar(200)
+  trt                       String?        @db.VarChar(2)
+  catl                      String?        @db.VarChar(20)
+  mott                      String?        @db.VarChar(2)
+  sort                      String?        @db.VarChar(2)
+  tel1                      String?        @db.VarChar(40)
+  tel2                      String?        @db.VarChar(40)
+  tel3                      String?        @db.VarChar(40)
+  motif                     String?        @db.VarChar(1000)
+  phase                     String?        @db.VarChar(3)
+  trf_a                     String?        @db.VarChar(1)
+  trf_c                     String?        @db.VarChar(1)
+  trt_d                     String?        @db.VarChar(1)
   agence                    Int?
   classe                    Int?
   groupe                    Int?
-  motstr                    String?   @db.VarChar(2)
-  prol_c                    String?   @db.VarChar(1)
-  region                    String?   @db.VarChar(3)
-  trt_fc                    String?   @db.VarChar(1)
-  encours                   Decimal?  @db.Decimal(15, 3)
+  motstr                    String?        @db.VarChar(2)
+  prol_c                    String?        @db.VarChar(1)
+  region                    String?        @db.VarChar(3)
+  trt_fc                    String?        @db.VarChar(1)
+  encours                   Decimal?       @db.Decimal(15, 3)
   max_nbj                   Int?
-  mnt_imp                   Decimal?  @db.Decimal(15, 3)
+  mnt_imp                   Decimal?       @db.Decimal(15, 3)
   score_c                   Int?
-  susp_cc                   String?   @default("N") @db.VarChar(1)
-  susp_lr                   String?   @default("N") @db.VarChar(1)
-  trf_c_d                   String?   @db.VarChar(1)
-  trf_ctx                   String?   @db.VarChar(1)
-  trt_adm                   String?   @db.VarChar(2)
-  trt_agc                   String?   @db.VarChar(2)
-  trt_div                   String?   @db.VarChar(2)
-  trt_dos                   String?   @db.VarChar(2)
-  trt_dre                   String?   @db.VarChar(2)
-  trt_ext                   String?   @db.VarChar(2)
-  trt_grp                   String?   @db.VarChar(2)
-  trt_plr                   String?   @db.VarChar(2)
-  trt_rec                   String?   @db.VarChar(2)
-  trt_reg                   String?   @db.VarChar(2)
-  trt_rer                   String?   @db.VarChar(2)
-  trt_res                   String?   @db.VarChar(2)
-  trt_sog                   String?   @db.VarChar(1)
-  trt_tak                   String?   @db.VarChar(2)
-  trt_tar                   String?   @db.VarChar(2)
-  code_aff                  String?   @db.VarChar(3)
-  code_rec                  String?   @db.VarChar(2)
-  date_lmd                  DateTime? @db.Date
-  etat_lmd                  String?   @db.VarChar(1)
-  flag_sms                  String?   @db.VarChar(1)
-  flag_trt                  String?   @db.VarChar(1)
-  huissier                  String?   @db.VarChar(10)
+  susp_cc                   String?        @default("N") @db.VarChar(1)
+  susp_lr                   String?        @default("N") @db.VarChar(1)
+  trf_c_d                   String?        @db.VarChar(1)
+  trf_ctx                   String?        @db.VarChar(1)
+  trt_adm                   String?        @db.VarChar(2)
+  trt_agc                   String?        @db.VarChar(2)
+  trt_div                   String?        @db.VarChar(2)
+  trt_dos                   String?        @db.VarChar(2)
+  trt_dre                   String?        @db.VarChar(2)
+  trt_ext                   String?        @db.VarChar(2)
+  trt_grp                   String?        @db.VarChar(2)
+  trt_plr                   String?        @db.VarChar(2)
+  trt_rec                   String?        @db.VarChar(2)
+  trt_reg                   String?        @db.VarChar(2)
+  trt_rer                   String?        @db.VarChar(2)
+  trt_res                   String?        @db.VarChar(2)
+  trt_sog                   String?        @db.VarChar(1)
+  trt_tak                   String?        @db.VarChar(2)
+  trt_tar                   String?        @db.VarChar(2)
+  code_aff                  String?        @db.VarChar(3)
+  code_rec                  String?        @db.VarChar(2)
+  date_lmd                  DateTime?      @db.Date
+  etat_lmd                  String?        @db.VarChar(1)
+  flag_sms                  String?        @db.VarChar(1)
+  flag_trt                  String?        @db.VarChar(1)
+  huissier                  String?        @db.VarChar(10)
   nbre_imp                  Int?
-  prol_v_c                  String?   @db.VarChar(1)
+  prol_v_c                  String?        @db.VarChar(1)
   score_re                  Int?
-  susp_crd                  String?   @default("N") @db.VarChar(1)
-  susp_sms                  String?   @default("N") @db.VarChar(1)
-  trf_attr                  String?   @db.VarChar(1)
-  trt_call                  String?   @db.VarChar(2)
-  codesuivi                 String?   @db.VarChar(2)
-  date_prol                 DateTime? @db.Date
-  date_susp                 DateTime? @db.Date
-  etat_scan                 String?   @db.VarChar(2)
-  reaff_str                 String?   @db.VarChar(1)
-  susp_lmd1                 String?   @default("N") @db.VarChar(1)
-  susp_lmd2                 String?   @default("N") @db.VarChar(1)
-  susp_somm                 String?   @default("N") @db.VarChar(1)
-  trf_ctx_v                 String?   @db.VarChar(1)
-  trt_adm_d                 String?   @db.VarChar(2)
-  trt_agc_d                 String?   @db.VarChar(2)
-  trt_chcom                 String?   @db.VarChar(2)
-  trt_div_d                 String?   @db.VarChar(2)
-  trt_dos_d                 String?   @db.VarChar(2)
-  trt_dre_d                 String?   @db.VarChar(2)
-  trt_grp_d                 String?   @db.VarChar(2)
-  trt_mecom                 String?   @db.VarChar(2)
-  trt_plr_d                 String?   @db.VarChar(2)
-  trt_rec_d                 String?   @db.VarChar(2)
-  trt_reg_d                 String?   @db.VarChar(2)
-  trt_rer_d                 String?   @db.VarChar(2)
-  trt_suivi                 String?   @db.VarChar(2)
-  date_carte                DateTime? @db.Date
-  date_trf_c                DateTime? @db.Date
+  susp_crd                  String?        @default("N") @db.VarChar(1)
+  susp_sms                  String?        @default("N") @db.VarChar(1)
+  trf_attr                  String?        @db.VarChar(1)
+  trt_call                  String?        @db.VarChar(2)
+  codesuivi                 String?        @db.VarChar(2)
+  date_prol                 DateTime?      @db.Date
+  date_susp                 DateTime?      @db.Date
+  etat_scan                 String?        @db.VarChar(2)
+  reaff_str                 String?        @db.VarChar(1)
+  susp_lmd1                 String?        @default("N") @db.VarChar(1)
+  susp_lmd2                 String?        @default("N") @db.VarChar(1)
+  susp_somm                 String?        @default("N") @db.VarChar(1)
+  trf_ctx_v                 String?        @db.VarChar(1)
+  trt_adm_d                 String?        @db.VarChar(2)
+  trt_agc_d                 String?        @db.VarChar(2)
+  trt_chcom                 String?        @db.VarChar(2)
+  trt_div_d                 String?        @db.VarChar(2)
+  trt_dos_d                 String?        @db.VarChar(2)
+  trt_dre_d                 String?        @db.VarChar(2)
+  trt_grp_d                 String?        @db.VarChar(2)
+  trt_mecom                 String?        @db.VarChar(2)
+  trt_plr_d                 String?        @db.VarChar(2)
+  trt_rec_d                 String?        @db.VarChar(2)
+  trt_reg_d                 String?        @db.VarChar(2)
+  trt_rer_d                 String?        @db.VarChar(2)
+  trt_suivi                 String?        @db.VarChar(2)
+  date_carte                DateTime?      @db.Date
+  date_trf_c                DateTime?      @db.Date
   eng_direct                Int?
-  engagement                Decimal?  @db.Decimal(15, 3)
-  etat_carte                String?   @db.VarChar(1)
-  etat_scan2                String?   @db.VarChar(2)
-  motif_som1                String?   @db.VarChar(1000)
-  motif_som2                String?   @db.VarChar(1000)
-  phase_init                String?   @db.VarChar(3)
-  prop_conso                String?   @db.VarChar(1)
-  recouvreur                String?   @db.VarChar(10)
-  trt_call_d                String?   @db.VarChar(2)
-  arrengement               String?   @db.VarChar(1)
+  engagement                Decimal?       @db.Decimal(15, 3)
+  etat_carte                String?        @db.VarChar(1)
+  etat_scan2                String?        @db.VarChar(2)
+  motif_som1                String?        @db.VarChar(1000)
+  motif_som2                String?        @db.VarChar(1000)
+  phase_init                String?        @db.VarChar(3)
+  prop_conso                String?        @db.VarChar(1)
+  recouvreur                String?        @db.VarChar(10)
+  trt_call_d                String?        @db.VarChar(2)
+  arrengement               String?        @db.VarChar(1)
   classe_prec               Int?
-  code_engage               String?   @db.VarChar(2)
-  date_prol_v               DateTime? @db.Date
-  depassement               Decimal?  @db.Decimal(15, 3)
-  etat_lettre               String?   @db.VarChar(1)
-  flg_trf_ctx               String?   @db.VarChar(1)
-  prop_valide               String?   @db.VarChar(1)
-  susp_valide               String?   @db.VarChar(1)
-  tot_creance               Decimal?  @db.Decimal(15, 3)
-  trf_propose               String?   @db.VarChar(1)
-  trt_chcom_d               String?   @db.VarChar(2)
-  trt_cnx_sog               String?   @db.VarChar(1)
-  trt_mecom_d               String?   @db.VarChar(2)
-  trt_suivi_d               String?   @db.VarChar(2)
-  type_client               String?   @db.VarChar(1)
-  confirmation              String?   @db.VarChar(1)
-  date_collect              DateTime? @db.Date
-  date_trf_ctx              DateTime? @db.Date
-  etat_pv_som1              String?   @db.VarChar(1)
-  etat_pv_som2              String?   @db.VarChar(1)
-  flag_collect              String?   @db.VarChar(1)
-  flg_stk_prol              String?   @db.VarChar(1)
+  code_engage               String?        @db.VarChar(2)
+  date_prol_v               DateTime?      @db.Date
+  depassement               Decimal?       @db.Decimal(15, 3)
+  etat_lettre               String?        @db.VarChar(1)
+  flg_trf_ctx               String?        @db.VarChar(1)
+  prop_valide               String?        @db.VarChar(1)
+  susp_valide               String?        @db.VarChar(1)
+  tot_creance               Decimal?       @db.Decimal(15, 3)
+  trf_propose               String?        @db.VarChar(1)
+  trt_chcom_d               String?        @db.VarChar(2)
+  trt_cnx_sog               String?        @db.VarChar(1)
+  trt_mecom_d               String?        @db.VarChar(2)
+  trt_suivi_d               String?        @db.VarChar(2)
+  type_client               String?        @db.VarChar(1)
+  confirmation              String?        @db.VarChar(1)
+  date_collect              DateTime?      @db.Date
+  date_trf_ctx              DateTime?      @db.Date
+  etat_pv_som1              String?        @db.VarChar(1)
+  etat_pv_som2              String?        @db.VarChar(1)
+  flag_collect              String?        @db.VarChar(1)
+  flg_stk_prol              String?        @db.VarChar(1)
   marge_prol_c              Int?
   marge_prol_d              Int?
-  motif_prol_c              String?   @db.VarChar(2)
-  motif_prol_d              String?   @db.VarChar(2)
+  motif_prol_c              String?        @db.VarChar(2)
+  motif_prol_d              String?        @db.VarChar(2)
   nombre_jours              Int?
-  prop_susp_cc              String?   @default("N") @db.VarChar(1)
-  prop_susp_lr              String?   @default("N") @db.VarChar(1)
-  susp_propose              String?   @db.VarChar(1)
-  trt_call_rec              String?   @db.VarChar(1)
-  trt_call_sog              String?   @db.VarChar(2)
-  valid_prol_d              String?   @db.VarChar(1)
-  code_aff_init             String?   @db.VarChar(3)
-  date_conf_dos             DateTime? @db.Date
-  date_trf_attr             DateTime? @db.Date
-  date_trfa_ctx             DateTime? @db.Date
-  etat_scan_ctx             String?   @db.VarChar(2)
-  etat_scan_dos             String?   @db.VarChar(2)
-  flag_scan_dos             String?   @db.VarChar(1)
-  matricule_ctx             String?   @db.VarChar(4)
-  motif_trf_ctx             String?   @db.VarChar(2)
-  prop_susp_crd             String?   @default("N") @db.VarChar(1)
-  prop_susp_sms             String?   @default("N") @db.VarChar(1)
-  susp_modifier             String?   @db.VarChar(1)
-  trf_dynamique             String?   @db.VarChar(1)
-  trf_propose_v             String?   @db.VarChar(1)
-  valid_strat_d             String?   @db.VarChar(4)
-  date_aff_huiss            DateTime? @db.Date
-  date_conf_som1            DateTime? @db.Date
-  date_conf_som2            DateTime? @db.Date
-  date_prop_prol            DateTime? @db.Date
-  date_prop_susp            DateTime? @db.Date
-  matricule_attr            String?   @db.VarChar(4)
-  matricule_susp            String?   @db.VarChar(4)
-  motif_scan_ctx            String?   @db.VarChar(1000)
-  prol_propose_c            String?   @db.VarChar(1)
-  prol_propose_d            String?   @db.VarChar(1)
-  prop_susp_lmd1            String?   @default("N") @db.VarChar(1)
-  prop_susp_lmd2            String?   @default("N") @db.VarChar(1)
-  prop_susp_somm            String?   @default("N") @db.VarChar(1)
-  trt_cnx_sog_cc            String?   @db.VarChar(2)
-  date_prop_conso           DateTime? @db.Date
-  date_sommation1           DateTime? @db.Date
-  date_sommation2           DateTime? @db.Date
-  date_trfa_ctx_c           DateTime? @db.Date
-  etat_recouvreur           String?   @db.VarChar(1)
-  matricule_conso           String?   @db.VarChar(4)
-  matricule_trf_c           String?   @db.VarChar(4)
-  strat_propose_d           String?   @db.VarChar(1)
-  trf_contentieux           String?   @db.VarChar(2)
-  trf_ctx_propose           String?   @db.VarChar(1)
-  trt_cnx_sog_dir           String?   @db.VarChar(2)
-  trt_cnx_sog_div           String?   @db.VarChar(2)
-  confirmation_ctx          String?   @db.VarChar(1)
-  date_prop_prol_d          DateTime? @db.Date
-  date_trf_propose          DateTime? @db.Date
-  lettre_employeur          String?   @db.VarChar(1)
-  matricule_lettre          String?   @db.VarChar(4)
-  matricule_prol_c          String?   @db.VarChar(4)
+  prop_susp_cc              String?        @default("N") @db.VarChar(1)
+  prop_susp_lr              String?        @default("N") @db.VarChar(1)
+  susp_propose              String?        @db.VarChar(1)
+  trt_call_rec              String?        @db.VarChar(1)
+  trt_call_sog              String?        @db.VarChar(2)
+  valid_prol_d              String?        @db.VarChar(1)
+  code_aff_init             String?        @db.VarChar(3)
+  date_conf_dos             DateTime?      @db.Date
+  date_trf_attr             DateTime?      @db.Date
+  date_trfa_ctx             DateTime?      @db.Date
+  etat_scan_ctx             String?        @db.VarChar(2)
+  etat_scan_dos             String?        @db.VarChar(2)
+  flag_scan_dos             String?        @db.VarChar(1)
+  matricule_ctx             String?        @db.VarChar(4)
+  motif_trf_ctx             String?        @db.VarChar(2)
+  prop_susp_crd             String?        @default("N") @db.VarChar(1)
+  prop_susp_sms             String?        @default("N") @db.VarChar(1)
+  susp_modifier             String?        @db.VarChar(1)
+  trf_dynamique             String?        @db.VarChar(1)
+  trf_propose_v             String?        @db.VarChar(1)
+  valid_strat_d             String?        @db.VarChar(4)
+  date_aff_huiss            DateTime?      @db.Date
+  date_conf_som1            DateTime?      @db.Date
+  date_conf_som2            DateTime?      @db.Date
+  date_prop_prol            DateTime?      @db.Date
+  date_prop_susp            DateTime?      @db.Date
+  matricule_attr            String?        @db.VarChar(4)
+  matricule_susp            String?        @db.VarChar(4)
+  motif_scan_ctx            String?        @db.VarChar(1000)
+  prol_propose_c            String?        @db.VarChar(1)
+  prol_propose_d            String?        @db.VarChar(1)
+  prop_susp_lmd1            String?        @default("N") @db.VarChar(1)
+  prop_susp_lmd2            String?        @default("N") @db.VarChar(1)
+  prop_susp_somm            String?        @default("N") @db.VarChar(1)
+  trt_cnx_sog_cc            String?        @db.VarChar(2)
+  date_prop_conso           DateTime?      @db.Date
+  date_sommation1           DateTime?      @db.Date
+  date_sommation2           DateTime?      @db.Date
+  date_trfa_ctx_c           DateTime?      @db.Date
+  etat_recouvreur           String?        @db.VarChar(1)
+  matricule_conso           String?        @db.VarChar(4)
+  matricule_trf_c           String?        @db.VarChar(4)
+  strat_propose_d           String?        @db.VarChar(1)
+  trf_contentieux           String?        @db.VarChar(2)
+  trf_ctx_propose           String?        @db.VarChar(1)
+  trt_cnx_sog_dir           String?        @db.VarChar(2)
+  trt_cnx_sog_div           String?        @db.VarChar(2)
+  confirmation_ctx          String?        @db.VarChar(1)
+  date_prop_prol_d          DateTime?      @db.Date
+  date_trf_propose          DateTime?      @db.Date
+  lettre_employeur          String?        @db.VarChar(1)
+  matricule_lettre          String?        @db.VarChar(4)
+  matricule_prol_c          String?        @db.VarChar(4)
   nombre_jours_sdb          Int?
-  date_conf_trf_ctx         DateTime? @db.Date
-  date_prop_strat_d         DateTime? @db.Date
-  date_reaf_strat_d         DateTime? @db.Date
-  date_valid_prol_d         DateTime? @db.Date
-  lettre_sommation1         String?   @db.VarChar(2)
-  lettre_sommation2         String?   @db.VarChar(2)
-  matricule_collect         String?   @db.VarChar(4)
-  matricule_trf_ctx         String?   @db.VarChar(4)
-  prop_modification         String?   @db.VarChar(1)
-  date_lettre_recouv        DateTime? @db.Date
-  date_trf_propose_v        DateTime? @db.Date
-  date_valid_strat_d        DateTime? @db.Date
-  matricule_prol_c_v        String?   @db.VarChar(4)
-  date_aff_recouvreur       DateTime? @db.Date
-  matricule_prop_susp       String?   @db.VarChar(4)
-  matricule_trf_ctx_c       String?   @db.VarChar(4)
-  date_prop_modif_susp      DateTime? @db.Date
-  matricule_affect_rec      String?   @db.VarChar(4)
-  montant_autorisation      Decimal?  @db.Decimal(15, 3)
-  date_lettre_employeur     DateTime? @db.Date
-  matricule_prop_prol_c     String?   @db.VarChar(4)
-  matricule_prop_prol_d     String?   @db.VarChar(4)
-  matricule_trf_propose     String?   @db.VarChar(4)
-  matricule_affect_huiss    String?   @db.VarChar(4)
-  matricule_prop_strat_d    String?   @db.VarChar(4)
-  matricule_reaf_strat_d    String?   @db.VarChar(4)
-  matricule_valid_prol_d    String?   @db.VarChar(4)
-  matricule_trf_propose_v   String?   @db.VarChar(4)
-  matricule_valid_strat_d   String?   @db.VarChar(4)
-  matricule_prop_modif_susp String?   @db.VarChar(4)
-  id                        BigInt    @unique @default(autoincrement())
-  created_at                DateTime? @default(now()) @db.Timestamp(6)
-  updated_at                DateTime? @default(now()) @db.Timestamp(6)
-  Agence                    Agence?   @relation(fields: [agence], references: [codug], onDelete: NoAction, onUpdate: NoAction)
-  Zone                      Zone?     @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  date_conf_trf_ctx         DateTime?      @db.Date
+  date_prop_strat_d         DateTime?      @db.Date
+  date_reaf_strat_d         DateTime?      @db.Date
+  date_valid_prol_d         DateTime?      @db.Date
+  lettre_sommation1         String?        @db.VarChar(2)
+  lettre_sommation2         String?        @db.VarChar(2)
+  matricule_collect         String?        @db.VarChar(4)
+  matricule_trf_ctx         String?        @db.VarChar(4)
+  prop_modification         String?        @db.VarChar(1)
+  date_lettre_recouv        DateTime?      @db.Date
+  date_trf_propose_v        DateTime?      @db.Date
+  date_valid_strat_d        DateTime?      @db.Date
+  matricule_prol_c_v        String?        @db.VarChar(4)
+  date_aff_recouvreur       DateTime?      @db.Date
+  matricule_prop_susp       String?        @db.VarChar(4)
+  matricule_trf_ctx_c       String?        @db.VarChar(4)
+  date_prop_modif_susp      DateTime?      @db.Date
+  matricule_affect_rec      String?        @db.VarChar(4)
+  montant_autorisation      Decimal?       @db.Decimal(15, 3)
+  date_lettre_employeur     DateTime?      @db.Date
+  matricule_prop_prol_c     String?        @db.VarChar(4)
+  matricule_prop_prol_d     String?        @db.VarChar(4)
+  matricule_trf_propose     String?        @db.VarChar(4)
+  matricule_affect_huiss    String?        @db.VarChar(4)
+  matricule_prop_strat_d    String?        @db.VarChar(4)
+  matricule_reaf_strat_d    String?        @db.VarChar(4)
+  matricule_valid_prol_d    String?        @db.VarChar(4)
+  matricule_trf_propose_v   String?        @db.VarChar(4)
+  matricule_valid_strat_d   String?        @db.VarChar(4)
+  matricule_prop_modif_susp String?        @db.VarChar(4)
+  id                        BigInt         @unique @default(autoincrement())
+  created_at                DateTime?      @default(now()) @db.Timestamp(6)
+  updated_at                DateTime?      @default(now()) @db.Timestamp(6)
+  Agence                    Agence?        @relation(fields: [agence], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  Zone                      Zone?          @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  suivi_agenda              suivi_agenda[]
 
   @@id([cli, id])
   @@index([cli])
@@ -638,16 +639,17 @@ model suivi_agenda {
   matricule_rdv                                               String?           @db.VarChar
   usr_matricule                                               String?           @db.VarChar
   versement_prealable                                         Decimal?          @db.Decimal(38, 9)
-  id                                                          Int               @id @unique(map: "unique_suiviagenda") @default(autoincrement())
+  id                                                          Int               @id @unique @default(autoincrement())
   app_genId                                                   Int?              @unique
   motifimpId                                                  Int?              @unique
   liste_choixId                                               Int?              @unique
   created_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
   updated_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
-  comptretypeid                                               Int?
+  CliClient                                                   BigInt?
+  ClientID                                                    BigInt?
   compterendutype_compterendutype_compterenduidTosuivi_agenda compterendutype[] @relation("compterendutype_compterenduidTosuivi_agenda")
+  ab_client                                                   ab_client?        @relation(fields: [ClientID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   appreciation                                                appreciation?     @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  compterendutype_suivi_agenda_comptretypeidTocompterendutype compterendutype?  @relation("suivi_agenda_comptretypeidTocompterendutype", fields: [comptretypeid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   listechoix                                                  listechoix?       @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   motifimp                                                    motifimp?         @relation(fields: [motifimpId], references: [code], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -685,7 +687,6 @@ model montantfacilite {
 model nonreconaissance {
   id              Int               @id @unique(map: "unique_nonreconnai") @default(autoincrement())
   observation     String?           @db.VarChar
-  suiviagendaid   Int?
   compterendutype compterendutype[]
 }
 
@@ -694,7 +695,6 @@ model nouvellecoordonnees {
   nouv_te2        String?           @db.VarChar
   nouv_tel        String?           @db.VarChar
   nouv_adresse    String?           @db.VarChar
-  suiviagendaid   Int?
   compterendutype compterendutype[]
 }
 
@@ -703,7 +703,6 @@ model promesseregresse {
   mnt_reg         Decimal?          @db.Decimal(38, 9)
   date_ver        DateTime?         @db.Date
   lieu_ver        String?           @db.VarChar
-  suiviagendaid   Int?
   compterendutype compterendutype[]
 }
 
@@ -870,7 +869,6 @@ model compterendutype {
   promesseregresse                                         promesseregresse?    @relation(fields: [promesseregresseID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   types                                                    types?               @relation(fields: [typeID], references: [code], onDelete: NoAction, onUpdate: NoAction)
   visite                                                   visite?              @relation(fields: [visiteId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agenda_suivi_agenda_comptretypeidTocompterendutype suivi_agenda[]       @relation("suivi_agenda_comptretypeidTocompterendutype")
 }
 
 model types {
