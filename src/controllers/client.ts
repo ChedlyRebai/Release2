@@ -15,6 +15,8 @@ const getAffectation = async (matricule: string) => {
   });
 };
 
+
+
 const SELECT_FIELDS = {
   cli: true,
   nom: true,
@@ -33,6 +35,7 @@ const SELECT_FIELDS = {
   tel1: true,
   tel2: true,
 };
+
 
 // export const getAllLinks = async (req: Request, res: Response) => {
 //   try {

@@ -15,6 +15,7 @@ router.use("/listcompte",compression({level:9}),getListCompte)
 router.use("/listhistorique",compression({level:9}),getHistoriqueCompteRendu)
 router.get('/motifs',getMotifs)
 router.get('/contact',contact)
+
 router.get('/appreciation',getAppreciation)
 router.get('/gethrdv',gethrdv)
 

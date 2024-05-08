@@ -458,6 +458,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
           },
         },
       });
+
       return res
         .status(StatusCodes.OK)
         .type("json")
@@ -583,6 +584,13 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
       cli: true,
       compte_rendu: true,
       usr_nom: true,
+      ab_client: {
+        select: {
+          nom: true,
+          cli: true,
+
+        },
+      },
       compterendutype_compterendutype_compterenduidTosuivi_agenda: {
         select: {
           
@@ -650,13 +658,7 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
               observation: true,
             },
           },
-          ab_client: {
-            select: {
-              nom: true,
-              cli: true,
-  
-            },
-          },
+          
 
 
         },
