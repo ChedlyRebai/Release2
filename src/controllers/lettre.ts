@@ -30,6 +30,7 @@ const SELECT_FIELDS = {
   depassement: true,
   ncp: true,
   nbre_imp: true,
+  Agence: true,
 };
 
 export const getLettres = async (req: Request, res: Response) => {
@@ -86,7 +87,7 @@ const getClientContacteByZoneAdminAgence = async (
 ) => {
   try {
     let whereClose: any = {};
-
+    console.log(matricule);
     const jour = await db.ab_param.findFirst({
       where: {
         code: "LETTRE",
@@ -121,12 +122,30 @@ const getClientContacteByZoneAdminAgence = async (
     // const montantLettreNumber=0
     // const jourNumber = 0;
     const jourNumber = Number(jour?.jour?.toString());
-   const jourfNumber = Number(jourf?.jourf?.toString());
+    const jourfNumber = Number(jourf?.jourf?.toString());
     //const jourfNumber = 0;
 
-    if (matricule !== "1802") {
-      const affectation = await getAffectation(matricule);
-      
+    const affectation = await db.affecterA.findFirst({
+      where: {
+        // UtilisateurID: userId.id,
+        Utilisateur: {
+          usr_matricule: "2314",
+        },
+      },
+      select: {
+        TypeAffectation: true,
+        TypesAffectation: true,
+        Agence: true,
+        Zone: true,
+      },
+    });
+    console.log(affectation, "affectation");
+    console.log(affectation.Agence, "affectation");
+    console.log(affectation.Zone, "affectation");
+
+    if (Number(affectation.TypeAffectation) === 4) {
+      //grooup
+      console.log("group");
       whereClose = {
         AND: [
           {
@@ -138,11 +157,14 @@ const getClientContacteByZoneAdminAgence = async (
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
           { mnt_imp: { gte: montantLettreNumber } },
           { phase: "C" },
-          { groupe: { in: ["910"] } },
+          { Zone: affectation.Zone },
+          // { groupe: { in: ["910"] } },
         ],
       };
     }
-    if (matricule === "1802") {
+    if (Number(affectation.TypeAffectation) === 1) {
+      //agence
+      console.log("agence");
       whereClose = {
         AND: [
           {
@@ -155,9 +177,44 @@ const getClientContacteByZoneAdminAgence = async (
 
           { mnt_imp: { gte: montantLettreNumber } },
           { phase: "C" },
+          { Agence: affectation.Agence },
         ],
       };
     }
+    // if (matricule !== "1802") {
+    //   const affectation = await getAffectation(matricule);
+    //   whereClose = {
+    //     AND: [
+    //       {
+    //         OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
+    //       },
+    //       {
+    //         OR: [{ susp_lr: "N" }, { susp_lr: null }],
+    //       },
+    //       // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
+    //       { mnt_imp: { gte: montantLettreNumber } },
+    //       { phase: "C" },
+    //       // { groupe: { in: ["910"] } },
+    //     ],
+    //   };
+    // }
+
+    // if (matricule === "1802") {
+    //   whereClose = {
+    //     AND: [
+    //       {
+    //         OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
+    //       },
+    //       {
+    //         OR: [{ susp_lr: "N" }, { susp_lr: null }],
+    //       },
+    //       // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
+
+    //       { mnt_imp: { gte: montantLettreNumber } },
+    //       { phase: "C" },
+    //     ],
+    //   };
+    // }
 
     if (to !== 0) {
       whereClose.nombre_jours = { lte: to, gte: from };
@@ -171,10 +228,11 @@ const getClientContacteByZoneAdminAgence = async (
       whereClose.age = agence;
     }
 
-    if (search !== "") {
-      whereClose.nom = { contains: search.toLowerCase() };
-    }
+    // if (search !== "") {
+    //   whereClose.nom = { contains: search.toLowerCase() };
+    // }
 
+    console.log(whereClose, "whereClose before result");
     const result = await db.ab_compte.findMany({
       where: whereClose,
       select: SELECT_FIELDS,

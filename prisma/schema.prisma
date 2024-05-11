@@ -18,7 +18,7 @@ model fonction {
   lib_fonction  String?
   code_fonction Int           @id @unique @default(autoincrement())
   dep           Int?
-  Utilisateur   Utilisateur?
+  Utilisateur   Utilisateur[]
   droit_accee   droit_accee[]
   departement   departement?  @relation(fields: [dep], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -29,17 +29,20 @@ model Utilisateur {
   tel_chargee     String?             @db.VarChar
   affectation_c   String?             @db.VarChar
   affectation_d   String?             @db.VarChar
-  code_fonction   Int                 @unique @default(autoincrement())
+  code_fonction   Int                 @default(autoincrement())
   email_chargee   String?             @db.VarChar
-  usr_matricule   String?             @db.VarChar
+  usr_matricule   String?             @unique @db.VarChar
   usr_nomprenom   String?             @db.VarChar
   usr_motdepasse  String?             @db.VarChar
   affectation_sog String?             @db.VarChar
   id              Int                 @id @default(autoincrement())
   created_at      DateTime?           @default(now()) @db.Timestamp(6)
   updated_at      DateTime?           @default(now()) @db.Timestamp(6)
+  AffecterA       AffecterA[]
   comptes         Compte[]
+  Files           Files[]
   fonction        fonction            @relation(fields: [code_fonction], references: [code_fonction], onDelete: NoAction, onUpdate: NoAction)
+  suivi_agenda    suivi_agenda[]
   client_recouv   v_client_recouv?
   obsClients      ImpObstransclient[] @relation("ObsClients")
 }
@@ -54,6 +57,7 @@ model Zone {
   libelle   String?     @db.VarChar
   codugr    Int
   codug     Int         @id @unique @default(autoincrement())
+  AffecterA AffecterA[]
   Agence    Agence[]
   Compte    Compte[]
   Region    Region      @relation(fields: [codugr], references: [codug])
@@ -65,6 +69,7 @@ model Agence {
   codug     Int         @id @default(autoincrement())
   libelle   String?     @db.VarChar
   codugz    Int
+  AffecterA AffecterA[]
   Zone      Zone        @relation(fields: [codugz], references: [codug], onDelete: NoAction, onUpdate: NoAction)
   Compte    Compte[]
   ab_client ab_client[]
@@ -185,7 +190,7 @@ model ab_client {
   fc                        String?        @db.VarChar(1)
   sd                        Decimal?       @db.Decimal(15, 3)
   act                       String?        @db.VarChar(20)
-  cli                       BigInt
+  cli                       String
   nom                       String?        @db.VarChar(100)
   obs                       String?        @db.VarChar(1000)
   seg                       String?        @db.VarChar(20)
@@ -395,8 +400,10 @@ model ab_client {
   id                        BigInt         @unique @default(autoincrement())
   created_at                DateTime?      @default(now()) @db.Timestamp(6)
   updated_at                DateTime?      @default(now()) @db.Timestamp(6)
+  Files                     Files[]
   Agence                    Agence?        @relation(fields: [agence], references: [codug], onDelete: NoAction, onUpdate: NoAction)
   Zone                      Zone?          @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  ab_compte                 ab_compte[]
   suivi_agenda              suivi_agenda[]
 
   @@id([cli, id])
@@ -647,8 +654,10 @@ model suivi_agenda {
   updated_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
   CliClient                                                   BigInt?
   ClientID                                                    BigInt?
+  UtilisateurID                                               Int?
   compterendutype_compterendutype_compterenduidTosuivi_agenda compterendutype[] @relation("compterendutype_compterenduidTosuivi_agenda")
   ab_client                                                   ab_client?        @relation(fields: [ClientID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Utilisateur                                                 Utilisateur?      @relation(fields: [UtilisateurID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   appreciation                                                appreciation?     @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   listechoix                                                  listechoix?       @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   motifimp                                                    motifimp?         @relation(fields: [motifimpId], references: [code], onDelete: NoAction, onUpdate: NoAction)
@@ -745,74 +754,76 @@ model h_rdv {
 
 model ab_compte {
   age                   Int?
-  cli                   BigInt    @unique @default(autoincrement())
-  ncp                   String?   @unique @db.VarChar
-  nom                   String?   @db.VarChar
-  phase                 String?   @db.VarChar
+  cli                   BigInt     @unique @default(autoincrement())
+  ncp                   String?    @unique @db.VarChar
+  nom                   String?    @db.VarChar
+  phase                 String?    @db.VarChar
   groupe                Int?
-  marche                String?   @db.VarChar
-  region                String?   @db.VarChar
-  flag_ls               String?   @db.VarChar
+  marche                String?    @db.VarChar
+  region                String?    @db.VarChar
+  flag_ls               String?    @db.VarChar
   max_nbj               BigInt?
-  mnt_imp               Decimal?  @db.Decimal(38, 9)
-  mnt_sdb               Decimal?  @db.Decimal(38, 9)
-  susp_lr               String?   @db.VarChar
-  tot_eng               Decimal?  @db.Decimal(38, 9)
-  code_rec              String?   @db.VarChar
-  date_lmd              DateTime? @db.Date
-  etat_lmd              String?   @db.VarChar
-  flag_lmd              String?   @db.VarChar
-  flg_ltrd              String?   @db.VarChar
+  mnt_imp               Decimal?   @db.Decimal(38, 9)
+  mnt_sdb               Decimal?   @db.Decimal(38, 9)
+  susp_lr               String?    @db.VarChar
+  tot_eng               Decimal?   @db.Decimal(38, 9)
+  code_rec              String?    @db.VarChar
+  date_lmd              DateTime?  @db.Date
+  etat_lmd              String?    @db.VarChar
+  flag_lmd              String?    @db.VarChar
+  flg_ltrd              String?    @db.VarChar
   nbre_imp              BigInt?
-  date_auto             DateTime? @db.Date
-  date_lmd2             DateTime? @db.Date
-  date_susp             DateTime? @db.Date
-  etat_lmd2             String?   @db.VarChar
-  etat_susp             String?   @db.VarChar
-  flag_lmd2             String?   @db.VarChar
-  lmd1_prop             String?   @db.VarChar
-  lmd2_prop             String?   @db.VarChar
-  susp_lmd1             String?   @db.VarChar
-  susp_lmd2             String?   @db.VarChar
+  date_auto             DateTime?  @db.Date
+  date_lmd2             DateTime?  @db.Date
+  date_susp             DateTime?  @db.Date
+  etat_lmd2             String?    @db.VarChar
+  etat_susp             String?    @db.VarChar
+  flag_lmd2             String?    @db.VarChar
+  lmd1_prop             String?    @db.VarChar
+  lmd2_prop             String?    @db.VarChar
+  susp_lmd1             String?    @db.VarChar
+  susp_lmd2             String?    @db.VarChar
   classe_gel            BigInt?
   classe_imp            BigInt?
-  date_carte            DateTime? @db.Date
-  etat_carte            String?   @db.VarChar
+  date_carte            DateTime?  @db.Date
+  etat_carte            String?    @db.VarChar
   nbre_d_aut            BigInt?
-  val_trf_rd            String?   @db.VarChar
-  date_finale           DateTime? @db.Date
-  depassement           Decimal?  @db.Decimal(38, 9)
-  etat_lettre           String?   @db.VarChar
-  mnt_dep_aut           Decimal?  @db.Decimal(38, 9)
-  montant_aut           Decimal?  @db.Decimal(38, 9)
+  val_trf_rd            String?    @db.VarChar
+  date_finale           DateTime?  @db.Date
+  depassement           Decimal?   @db.Decimal(38, 9)
+  etat_lettre           String?    @db.VarChar
+  mnt_dep_aut           Decimal?   @db.Decimal(38, 9)
+  montant_aut           Decimal?   @db.Decimal(38, 9)
   nbre_defaut           BigInt?
-  prop_trf_rd           String?   @db.VarChar
-  tot_creance           Decimal?  @db.Decimal(38, 9)
+  prop_trf_rd           String?    @db.VarChar
+  tot_creance           Decimal?   @db.Decimal(38, 9)
   AB_COMPTE_ID          BigInt?
-  flg_gen_ltrd          String?   @db.VarChar
-  matricule_ls          String?   @db.VarChar
+  flg_gen_ltrd          String?    @db.VarChar
+  matricule_ls          String?    @db.VarChar
   nombre_jours          BigInt?
-  flg_ltrd_date         DateTime? @db.Date
-  matricule_lmd         String?   @db.VarChar
-  date_prop_lmd1        DateTime? @db.Date
-  date_prop_lmd2        DateTime? @db.Date
-  matricule_lmd2        String?   @db.VarChar
-  val_trf_rd_date       DateTime? @db.Date
-  lettre_employeur      String?   @db.VarChar
-  matricule_lettre      String?   @db.VarChar
+  flg_ltrd_date         DateTime?  @db.Date
+  matricule_lmd         String?    @db.VarChar
+  date_prop_lmd1        DateTime?  @db.Date
+  date_prop_lmd2        DateTime?  @db.Date
+  matricule_lmd2        String?    @db.VarChar
+  val_trf_rd_date       DateTime?  @db.Date
+  lettre_employeur      String?    @db.VarChar
+  matricule_lettre      String?    @db.VarChar
   nombre_jours_sdb      BigInt?
-  prop_trf_rd_date      DateTime? @db.Date
-  date_lettre_recouv    DateTime? @db.Date
-  matricule_prop_lmd1   String?   @db.VarChar
-  matricule_prop_lmd2   String?   @db.VarChar
-  val_trf_rd_matricule  String?   @db.VarChar
-  date_lettre_employeur DateTime? @db.Date
-  prop_trf_rd_matricule String?   @db.VarChar
-  id                    Int       @id @default(autoincrement())
-  created_at            DateTime? @default(now()) @db.Timestamp(6)
-  updated_at            DateTime? @default(now()) @db.Timestamp(6)
-  Agence                Agence?   @relation(fields: [age], references: [codug], onDelete: NoAction, onUpdate: NoAction)
-  Zone                  Zone?     @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  prop_trf_rd_date      DateTime?  @db.Date
+  date_lettre_recouv    DateTime?  @db.Date
+  matricule_prop_lmd1   String?    @db.VarChar
+  matricule_prop_lmd2   String?    @db.VarChar
+  val_trf_rd_matricule  String?    @db.VarChar
+  date_lettre_employeur DateTime?  @db.Date
+  prop_trf_rd_matricule String?    @db.VarChar
+  id                    Int        @id @default(autoincrement())
+  created_at            DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at            DateTime?  @default(now()) @db.Timestamp(6)
+  ClientID              BigInt?
+  ab_client             ab_client? @relation(fields: [ClientID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Agence                Agence?    @relation(fields: [age], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  Zone                  Zone?      @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model droit_accee {
@@ -875,6 +886,40 @@ model types {
   code            Int               @id @unique(map: "types_codeType_key") @default(autoincrement())
   libelle         String?
   compterendutype compterendutype[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model AffecterA {
+  id               BigInt            @id @default(autoincrement())
+  created_at       DateTime          @default(now()) @db.Timestamptz(6)
+  UtilisateurID    Int?
+  AgenceCODE       Int?
+  TypeAffectation  BigInt?
+  ZoneCODE         Int?
+  Agence           Agence?           @relation(fields: [AgenceCODE], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  TypesAffectation TypesAffectation? @relation(fields: [TypeAffectation], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Utilisateur      Utilisateur?      @relation(fields: [UtilisateurID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Zone             Zone?             @relation(fields: [ZoneCODE], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Files {
+  id            Int          @id @default(autoincrement())
+  created_at    DateTime     @default(now()) @db.Timestamptz(6)
+  clientID      BigInt?
+  FilePath      String?
+  FileName      String?
+  UtilisateurID Int?
+  Utilisateur   Utilisateur? @relation(fields: [UtilisateurID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ab_client     ab_client?   @relation(fields: [clientID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model TypesAffectation {
+  id         BigInt      @id @default(autoincrement())
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  libelle    String?
+  AffecterA  AffecterA[]
 }
 
 enum role {
