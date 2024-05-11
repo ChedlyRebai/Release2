@@ -127,9 +127,8 @@ const getClientContacteByZoneAdminAgence = async (
 
     const affectation = await db.affecterA.findFirst({
       where: {
-        // UtilisateurID: userId.id,
         Utilisateur: {
-          usr_matricule: "2314",
+          usr_matricule: matricule,
         },
       },
       select: {
