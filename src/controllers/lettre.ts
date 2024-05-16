@@ -180,6 +180,25 @@ const getClientContacteByZoneAdminAgence = async (
         ],
       };
     }
+    if (Number(affectation.TypeAffectation) === 3) {
+      //grooup
+      console.log("group");
+      whereClose = {
+        AND: [
+          {
+            OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
+          },
+          {
+            OR: [{ susp_lr: "N" }, { susp_lr: null }],
+          },
+          // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
+          { mnt_imp: { gte: montantLettreNumber } },
+          { phase: "C" },
+
+          // { groupe: { in: ["910"] } },
+        ],
+      };
+    }
     // if (matricule !== "1802") {
     //   const affectation = await getAffectation(matricule);
     //   whereClose = {
