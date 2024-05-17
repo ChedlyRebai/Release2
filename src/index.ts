@@ -7,6 +7,7 @@ import cors from "cors";
 import clientroute from "./routes/clientroute";
 import compterenduroute from "./routes/compterendu";
 import lettreroute from "./routes/lettrerecouvrement";
+import "./controllers/cron"; // Import the cron module
 
 const app = express();
 
@@ -15,17 +16,16 @@ app.use(
     credentials: true,
   })
 );
-app.use(compression(
-  { level: 9 }
-));
+app.use(compression({ level: 9 }));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/client", clientroute);
-app.use('/compterendu',compterenduroute);
+app.use("/compterendu", compterenduroute);
+
 // compterendu/createcompterendu
 
-app.use('/lettre',lettreroute);
+app.use("/lettre", lettreroute);
 
 const server = http.createServer(app);
 

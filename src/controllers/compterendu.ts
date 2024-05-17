@@ -129,10 +129,19 @@ export const createCompteRendu = async (req: Request, res: Response) => {
 
     //   },
     // });
+
     const token = req.headers.authorization as string;
     const user = jwt.decode(token) as JwtPayload;
     const conmpterendutypes = await db.types.findMany();
-    console.log(user);
+    const client = await db.ab_client.findFirst({
+      where: {
+        cli: "49105812036",
+      },
+      select: {
+        id: true,
+      },
+    });
+    console.log(client);
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
         id: req.body.id,
@@ -142,6 +151,8 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         compte_rendu: compteRendu,
         usr_nom: user.role,
         usr_matricule: user.matricule,
+        UtilisateurID: Number(user.id),
+        ClientID: client.id,
       },
     });
     if (type == 1) {
