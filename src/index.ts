@@ -9,7 +9,7 @@ import compterenduroute from "./routes/compterendu";
 import lettreroute from "./routes/lettrerecouvrement";
 // import "./controllers/cron"; // Import the cron module
 import moment from "moment";
-
+import alertsroute from "./routes/alerts";
 const app = express();
 
 app.use(
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/client", clientroute);
 app.use("/compterendu", compterenduroute);
-
+app.use("/alerts", alertsroute);
 // compterendu/createcompterendu
 const today = moment().toDate();
 
