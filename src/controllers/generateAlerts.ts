@@ -1,6 +1,5 @@
-import { db } from "prisma/db";
-
-const moment = require("moment");
+import moment from "moment";
+import { db } from "../../prisma/db";
 
 const generateAlerts = async () => {
   const today = moment().startOf("day").toDate();
@@ -15,8 +14,8 @@ const generateAlerts = async () => {
       await db.alerte.create({
         data: {
           message: `Visite scheduled for today at ${visite.date_visite}`,
-          rapportId: visite.compterendutype.id,
-          rapportType: "visite",
+          //rapportId: visite.compterendutype[0].id,
+          //rapportType: "visite",
         },
       });
     }
@@ -30,8 +29,8 @@ const generateAlerts = async () => {
       await db.alerte.create({
         data: {
           message: `Promesse de regresse scheduled for today at ${promesse.date_ver}`,
-          rapportId: promesse.compterendutype.id,
-          rapportType: "promesseregresse",
+          //   rapportId: promesse.compterendutype.id,
+          //   rapportType: "promesseregresse",
         },
       });
     }

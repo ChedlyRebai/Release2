@@ -24,27 +24,28 @@ model fonction {
 }
 
 model Utilisateur {
-  flgstatut       String?             @db.VarChar
-  affectation     Int?
-  tel_chargee     String?             @db.VarChar
-  affectation_c   String?             @db.VarChar
-  affectation_d   String?             @db.VarChar
-  code_fonction   Int                 @default(autoincrement())
-  email_chargee   String?             @db.VarChar
-  usr_matricule   String?             @unique @db.VarChar
-  usr_nomprenom   String?             @db.VarChar
-  usr_motdepasse  String?             @db.VarChar
-  affectation_sog String?             @db.VarChar
-  id              Int                 @id @default(autoincrement())
-  created_at      DateTime?           @default(now()) @db.Timestamp(6)
-  updated_at      DateTime?           @default(now()) @db.Timestamp(6)
-  AffecterA       AffecterA[]
-  comptes         Compte[]
-  Files           Files[]
-  fonction        fonction            @relation(fields: [code_fonction], references: [code_fonction], onDelete: NoAction, onUpdate: NoAction)
-  suivi_agenda    suivi_agenda[]
-  client_recouv   v_client_recouv?
-  obsClients      ImpObstransclient[] @relation("ObsClients")
+  flgstatut                                                      String?             @db.VarChar
+  affectation                                                    Int?
+  tel_chargee                                                    String?             @db.VarChar
+  affectation_c                                                  String?             @db.VarChar
+  affectation_d                                                  String?             @db.VarChar
+  code_fonction                                                  Int                 @default(autoincrement())
+  email_chargee                                                  String?             @db.VarChar
+  usr_matricule                                                  String?             @unique @db.VarChar
+  usr_nomprenom                                                  String?             @db.VarChar
+  usr_motdepasse                                                 String?             @db.VarChar
+  affectation_sog                                                String?             @db.VarChar
+  id                                                             Int                 @id @default(autoincrement())
+  created_at                                                     DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at                                                     DateTime?           @default(now()) @db.Timestamp(6)
+  AffecterA                                                      AffecterA[]
+  comptes                                                        Compte[]
+  Files                                                          Files[]
+  ImpObstransclient_ImpObstransclient_UtilisateurIdToUtilisateur ImpObstransclient[] @relation("ImpObstransclient_UtilisateurIdToUtilisateur")
+  fonction                                                       fonction            @relation(fields: [code_fonction], references: [code_fonction], onDelete: NoAction, onUpdate: NoAction)
+  suivi_agenda                                                   suivi_agenda[]
+  client_recouv                                                  v_client_recouv?
+  obsClients                                                     ImpObstransclient[] @relation("ObsClients")
 }
 
 model Region {
@@ -66,15 +67,16 @@ model Zone {
 }
 
 model Agence {
-  codug     Int         @id @default(autoincrement())
-  libelle   String?     @db.VarChar
-  codugz    Int
-  AffecterA AffecterA[]
-  Zone      Zone        @relation(fields: [codugz], references: [codug], onDelete: NoAction, onUpdate: NoAction)
-  Compte    Compte[]
-  ab_client ab_client[]
-  ab_compte ab_compte[]
-  visite    visite[]
+  codug            Int                @id @default(autoincrement())
+  libelle          String?            @db.VarChar
+  codugz           Int
+  AffecterA        AffecterA[]
+  Zone             Zone               @relation(fields: [codugz], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  Compte           Compte[]
+  ab_client        ab_client[]
+  ab_compte        ab_compte[]
+  promesseregresse promesseregresse[]
+  visite           visite[]
 }
 
 model Compte {
@@ -150,54 +152,58 @@ model Compte {
 }
 
 model ImpObstransclient {
-  id           Int           @id @unique(map: "uniqueImp_id") @default(autoincrement())
-  obs          String?       @db.VarChar(4000)
-  numobs       Int?
-  cli          String?       @db.VarChar(20)
-  dateobs      DateTime?     @db.Date
-  etat_prop    String?       @db.VarChar(1)
-  transId      Int?
-  mottId       Int?
-  vtrfId       Int?
-  mott         Mott?         @relation(fields: [mottId], references: [id])
-  trans        Trans?        @relation(fields: [transId], references: [id])
-  vtrf         VTRF?         @relation(fields: [vtrfId], references: [id])
-  utilisateurs Utilisateur[] @relation("ObsClients")
+  id                                                       Int           @id @unique(map: "uniqueImp_id") @default(autoincrement())
+  obs                                                      String?       @db.VarChar(4000)
+  numobs                                                   Int?
+  cli                                                      String?       @db.VarChar(20)
+  dateobs                                                  DateTime?     @db.Date
+  etat_prop                                                String?       @db.VarChar(1)
+  transcodenv                                              String?       @db.VarChar
+  mottCodenv                                               Int?
+  vtrfCodenv                                               String?       @db.VarChar
+  UtilisateurId                                            Int?
+  flag_trf                                                 String?       @db.VarChar
+  Utilisateur_ImpObstransclient_UtilisateurIdToUtilisateur Utilisateur?  @relation("ImpObstransclient_UtilisateurIdToUtilisateur", fields: [UtilisateurId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Mott                                                     Mott?         @relation(fields: [mottCodenv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  Trans                                                    Trans?        @relation(fields: [transcodenv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  VTRF                                                     VTRF?         @relation(fields: [vtrfCodenv], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  utilisateurs                                             Utilisateur[] @relation("ObsClients")
 }
 
 model Mott {
-  id      Int                 @id @unique(map: "uniqueMott_id") @default(autoincrement())
-  libelle String?             @db.VarChar(100)
-  condenv String?             @unique @db.VarChar
-  impobs  ImpObstransclient[]
+  codenv            Int                 @id @unique(map: "uniqueMott_id") @default(autoincrement())
+  libelle           String?             @db.VarChar(100)
+  ImpObstransclient ImpObstransclient[]
+  ab_client         ab_client[]
+  suivi_agenda      suivi_agenda[]
 }
 
 model Trans {
-  id      Int                 @id @unique @default(autoincrement())
-  libelle String?             @db.VarChar(100)
-  codenv  String              @unique @db.VarChar
-  impobs  ImpObstransclient[]
+  codenv            String              @id @unique(map: "Trans_id_key") @db.VarChar
+  libelle           String?             @db.VarChar(100)
+  ImpObstransclient ImpObstransclient[]
+  ab_client         ab_client[]
 }
 
 model VTRF {
-  id       Int                 @id @unique(map: "uniquevtrf_id") @default(autoincrement())
-  libelle  String?             @db.VarChar(100)
-  code_env String?             @unique @db.VarChar
-  impobs   ImpObstransclient[]
+  codenv            String              @id @unique(map: "uniquevtrf_id") @db.VarChar
+  libelle           String?             @db.VarChar(100)
+  ImpObstransclient ImpObstransclient[]
+  ab_client         ab_client[]
 }
 
 model ab_client {
   fc                        String?        @db.VarChar(1)
   sd                        Decimal?       @db.Decimal(15, 3)
   act                       String?        @db.VarChar(20)
-  cli                       String
+  cli                       String         @unique
   nom                       String?        @db.VarChar(100)
   obs                       String?        @db.VarChar(1000)
   seg                       String?        @db.VarChar(20)
   tel                       String?        @db.VarChar(200)
   trt                       String?        @db.VarChar(2)
   catl                      String?        @db.VarChar(20)
-  mott                      String?        @db.VarChar(2)
+  mott                      Int?
   sort                      String?        @db.VarChar(2)
   tel1                      String?        @db.VarChar(40)
   tel2                      String?        @db.VarChar(40)
@@ -310,7 +316,7 @@ model ab_client {
   flg_stk_prol              String?        @db.VarChar(1)
   marge_prol_c              Int?
   marge_prol_d              Int?
-  motif_prol_c              String?        @db.VarChar(2)
+  motif_prol_c              Int?
   motif_prol_d              String?        @db.VarChar(2)
   nombre_jours              Int?
   prop_susp_cc              String?        @default("N") @db.VarChar(1)
@@ -403,6 +409,10 @@ model ab_client {
   Files                     Files[]
   Agence                    Agence?        @relation(fields: [agence], references: [codug], onDelete: NoAction, onUpdate: NoAction)
   Zone                      Zone?          @relation(fields: [groupe], references: [codug], onDelete: NoAction, onUpdate: NoAction)
+  Proc                      Proc?          @relation(fields: [motif_prol_c], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  Mott                      Mott?          @relation(fields: [mott], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  Trans                     Trans?         @relation(fields: [trf_a], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  VTRF                      VTRF?          @relation(fields: [trf_propose_v], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
   ab_compte                 ab_compte[]
   suivi_agenda              suivi_agenda[]
 
@@ -647,9 +657,9 @@ model suivi_agenda {
   usr_matricule                                               String?           @db.VarChar
   versement_prealable                                         Decimal?          @db.Decimal(38, 9)
   id                                                          Int               @id @unique @default(autoincrement())
-  app_genId                                                   Int?              @unique
-  motifimpId                                                  Int?              @unique
-  liste_choixId                                               Int?              @unique
+  app_genId                                                   Int?
+  motifimpId                                                  Int?
+  liste_choixId                                               Int?
   created_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
   updated_at                                                  DateTime?         @default(now()) @db.Timestamp(6)
   CliClient                                                   BigInt?
@@ -660,7 +670,7 @@ model suivi_agenda {
   Utilisateur                                                 Utilisateur?      @relation(fields: [UtilisateurID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   appreciation                                                appreciation?     @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   listechoix                                                  listechoix?       @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  motifimp                                                    motifimp?         @relation(fields: [motifimpId], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  motifimp                                                    Mott?             @relation(fields: [motifimpId], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model visite {
@@ -711,8 +721,9 @@ model promesseregresse {
   id              Int               @id @unique(map: "uniquepromesse") @default(autoincrement())
   mnt_reg         Decimal?          @db.Decimal(38, 9)
   date_ver        DateTime?         @db.Date
-  lieu_ver        String?           @db.VarChar
+  lieu_ver        Int?
   compterendutype compterendutype[]
+  Agence          Agence?           @relation(fields: [lieu_ver], references: [codug], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model clientInjoignable {
@@ -722,28 +733,28 @@ model clientInjoignable {
 }
 
 model appreciation {
-  code         Int           @id @unique @default(autoincrement())
-  libelle      String?       @db.VarChar(100)
-  suivi_agenda suivi_agenda?
+  code         Int            @id @unique @default(autoincrement())
+  libelle      String?        @db.VarChar(100)
+  suivi_agenda suivi_agenda[]
 }
 
 model motifimp {
-  code         Int           @id @unique @default(autoincrement())
-  libelle      String?       @db.VarChar(100)
-  suivi_agenda suivi_agenda?
+  code    Int     @id @unique @default(autoincrement())
+  libelle String? @db.VarChar(100)
 }
 
 model listechoix {
-  code         Int           @id @unique @default(autoincrement())
-  libelle      String?       @db.VarChar(100)
-  suivi_agenda suivi_agenda?
+  code         Int            @id @unique @default(autoincrement())
+  libelle      String?        @db.VarChar(100)
+  suivi_agenda suivi_agenda[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Proc {
-  codenv     Int       @id @default(autoincrement())
-  libelle    String    @db.VarChar
-  created_at DateTime? @default(now()) @db.Timestamp(6)
+  codenv     Int         @id @default(autoincrement())
+  libelle    String      @db.VarChar
+  created_at DateTime?   @default(now()) @db.Timestamp(6)
+  ab_client  ab_client[]
 }
 
 model h_rdv {
@@ -872,6 +883,7 @@ model compterendutype {
   promesseregresseID                                       Int?
   typeID                                                   Int?
   nonReconnaissanceID                                      Int?
+  alerte                                                   alerte[]
   clientInjoignable                                        clientInjoignable?   @relation(fields: [ClientInjoignableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   suivi_agenda_compterendutype_compterenduidTosuivi_agenda suivi_agenda?        @relation("compterendutype_compterenduidTosuivi_agenda", fields: [compterenduid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   FacilitePaiment                                          FacilitePaiment?     @relation(fields: [facilitePaimentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -920,6 +932,15 @@ model TypesAffectation {
   created_at DateTime    @default(now()) @db.Timestamptz(6)
   libelle    String?
   AffecterA  AffecterA[]
+}
+
+model alerte {
+  id              Int              @id @default(autoincrement())
+  message         String           @db.VarChar(255)
+  created_at      DateTime?        @default(now()) @db.Timestamptz(6)
+  rapportid       Int?
+  rapporttype     String?          @db.VarChar(50)
+  compterendutype compterendutype? @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")
 }
 
 enum role {
