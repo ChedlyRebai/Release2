@@ -73,6 +73,7 @@ model Agence {
   AffecterA        AffecterA[]
   Zone             Zone               @relation(fields: [codugz], references: [codug], onDelete: NoAction, onUpdate: NoAction)
   Compte           Compte[]
+  FacilitePaiment  FacilitePaiment[]
   ab_client        ab_client[]
   ab_compte        ab_compte[]
   promesseregresse promesseregresse[]
@@ -688,10 +689,11 @@ model FacilitePaiment {
   id               Int               @id @unique(map: "unique_facilitepaiement") @default(autoincrement())
   nb_ech           Decimal?          @db.Decimal(38, 9)
   mnt_rec          Decimal?          @db.Decimal(38, 9)
-  lieu_rec         String?           @db.VarChar
+  lieu_rec         Int?
   suiviagendaid    Int?
   created_at       DateTime?         @default(now()) @db.Timestamp(6)
   updated_at       DateTime?         @default(now()) @db.Timestamp(6)
+  Agence           Agence?           @relation(fields: [lieu_rec], references: [codug], onDelete: NoAction, onUpdate: NoAction)
   compterendutype  compterendutype[]
   montantFacilites montantfacilite[] @relation("FacilitePaimentId")
 }
@@ -941,8 +943,8 @@ model alerte {
   message         String           @db.VarChar(255)
   created_at      DateTime?        @default(now()) @db.Timestamptz(6)
   rapportid       Int?
-  ClientId        BigInt?
   rapporttype     Int?
+  ClientId        BigInt?
   ab_client       ab_client?       @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   types           types?           @relation(fields: [rapporttype], references: [code], onDelete: NoAction, onUpdate: NoAction)
   compterendutype compterendutype? @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")

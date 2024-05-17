@@ -5,6 +5,7 @@ import { json } from "../../public/utils";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Console } from "console";
 import { montantfacilite } from "@prisma/client";
+import { randomInt, randomUUID } from "crypto";
 
 // export const getCompterendu = async (req: Request, res: Response) => {}
 export const getCompterendu = async (req: Request, res: Response) => {
@@ -141,7 +142,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         id: true,
       },
     });
-    console.log("sui", suiviAgenda);
+
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
         num: 1,
@@ -154,8 +155,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         ClientID: client.id,
       },
     });
-    console.log("nouvelleCompteRendu", nouvelleCompteRendu);
-    console.log(nouvelleCompteRendu);
+
     if (type == 1) {
       const promesse = await db.promesseregresse.create({
         data: {
@@ -175,7 +175,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
 
       return res.status(StatusCodes.OK).json({ promesse, compterendutype });
     }
-    console.log(type);
+
     if (type == 2) {
       const novellecoordonnee = await db.nouvellecoordonnees.create({
         data: {
@@ -198,15 +198,16 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     if (type == 3) {
       const newFacilitePaiment = await prisma.facilitePaiment.create({
         data: {
+          id: randomInt(1, 1000),
           nb_ech: suiviAgenda.nb_ech,
           mnt_rec: suiviAgenda.mnt_rec,
           lieu_rec: suiviAgenda.lieu_rec,
           suiviagendaid: nouvelleCompteRendu.id,
         },
       });
-
+      console.log("newFacilitePaiment", newFacilitePaiment);
       const montantFacilites = suiviAgenda.montantFacilites;
-
+      console.log("mmmmmmmmmmmmmmmmmmmmmmmmm", montantFacilites);
       await Promise.all(
         montantFacilites.map(async (montantFacilite: montantfacilite) => {
           console.log(montantFacilite);
@@ -226,6 +227,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           typeID: 2,
         },
       });
+      console.log("compterendutype", compterendutype);
     }
 
     if (type == 4) {
