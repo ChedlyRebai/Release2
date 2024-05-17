@@ -24,6 +24,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
           select: {
             cli: true,
             Agence: true,
+            Zone: true,
             nom: true,
             tel1: true,
             tel2: true,
@@ -47,6 +48,27 @@ export const getAllAlerts = async (req: Request, res: Response) => {
 
     const n: any = { alertes, totalCount, totalPages };
     res.status(StatusCodes.OK).type("json").send(json(n));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+};
+
+export const getAlertById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const alerte = await db.alerte.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (alerte) {
+      res.status(StatusCodes.OK).json(alerte);
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Alerte not found" });
+    }
   } catch (error) {
     console.error(error);
     res
