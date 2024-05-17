@@ -117,8 +117,20 @@ const generateAlerts = async () => {
         mntech: true,
         date_ech: true,
         facilitePaiment: {
-          include: {
-            compterendutype: true,
+          select: {
+            suiviagendaid: true,
+
+            compterendutype: {
+              select: {
+                compterenduid: true,
+                typeID: true,
+                suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+                  select: {
+                    ClientID: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -130,8 +142,14 @@ const generateAlerts = async () => {
         .create({
           data: {
             message: `MontantFacilite scheduled for today at ${montantFacilite.date_ech} , montant : ${montantFacilite.mntech}`,
-            // rapportid: montantFacilite.mntech,
-            //rapporttype: "montantfacilite",
+            rapportid:
+              montantFacilite.facilitePaiment.compterendutype[0].compterenduid,
+            rapporttype:
+              montantFacilite.facilitePaiment.compterendutype[0].typeID,
+            ClientId:
+              montantFacilite.facilitePaiment.compterendutype[0]
+                .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
+                .ClientID,
           },
         })
         .then((res) => {
