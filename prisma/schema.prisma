@@ -414,6 +414,7 @@ model ab_client {
   Trans                     Trans?         @relation(fields: [trf_a], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
   VTRF                      VTRF?          @relation(fields: [trf_propose_v], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
   ab_compte                 ab_compte[]
+  alerte                    alerte[]
   suivi_agenda              suivi_agenda[]
 
   @@id([cli, id])
@@ -897,6 +898,7 @@ model compterendutype {
 model types {
   code            Int               @id @unique(map: "types_codeType_key") @default(autoincrement())
   libelle         String?
+  alerte          alerte[]
   compterendutype compterendutype[]
 }
 
@@ -939,7 +941,10 @@ model alerte {
   message         String           @db.VarChar(255)
   created_at      DateTime?        @default(now()) @db.Timestamptz(6)
   rapportid       Int?
-  rapporttype     String?          @db.VarChar(50)
+  rapporttype     Int?
+  ClientId        BigInt?
+  ab_client       ab_client?       @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  types           types?           @relation(fields: [rapporttype], references: [code], onDelete: NoAction, onUpdate: NoAction)
   compterendutype compterendutype? @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")
 }
 

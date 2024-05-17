@@ -8,6 +8,7 @@ import clientroute from "./routes/clientroute";
 import compterenduroute from "./routes/compterendu";
 import lettreroute from "./routes/lettrerecouvrement";
 import "./controllers/cron"; // Import the cron module
+import moment from "moment";
 
 const app = express();
 
@@ -24,13 +25,15 @@ app.use("/client", clientroute);
 app.use("/compterendu", compterenduroute);
 
 // compterendu/createcompterendu
+const today = moment().toDate();
 
+console.log("today", today);
 app.use("/lettre", lettreroute);
 
 const server = http.createServer(app);
 
 server.listen(10001, () => {
-  console.log("Sprint2 running on http://localhost:10001");
+  console.log("Sprint2 running on http://localhost:10001", today);
 });
 
 export default app;

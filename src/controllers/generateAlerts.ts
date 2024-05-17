@@ -2,42 +2,92 @@ import moment from "moment";
 import { db } from "../../prisma/db";
 
 const generateAlerts = async () => {
-  const today = moment().startOf("day").toDate();
+  const today = moment().toDate();
 
   try {
     const visites = await db.visite.findMany({
       where: { date_visite: today },
-      include: { compterendutype: true },
+      select: {
+        date_visite: true,
+        h_rdv: true,
+        lieu_visite: true,
+
+        Agence: {
+          select: {
+            libelle: true,
+          },
+        },
+        compterendutype: {
+          select: {
+            compterenduid: true,
+            typeID: true,
+            suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+              select: {
+                ClientID: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     for (const visite of visites) {
-      console.log("vite  ", visite.compterendutype[0].compterenduid);
+      console.log("vite  ", visite.compterendutype[0]);
       await db.alerte.create({
         data: {
           message: `Visite scheduled for today at ${visite.date_visite}`,
           rapportid: visite.compterendutype[0].compterenduid,
-          rapporttype: "visite",
+          rapporttype: visite.compterendutype[0].typeID,
         },
       });
     }
 
     const promesses = await db.promesseregresse.findMany({
       where: { date_ver: today },
-      include: { compterendutype: true },
+      select: {
+        date_ver: true,
+        mnt_reg: true,
+        Agence: {
+          select: {
+            libelle: true,
+          },
+        },
+        compterendutype: {
+          select: {
+            compterenduid: true,
+            typeID: true,
+            suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+              select: {
+                ClientID: true,
+              },
+            },
+          },
+        },
+      },
     });
+    console.log("Promesses ", promesses);
 
     for (const promesse of promesses) {
-      console.log("Promesse  ", promesse);
+      console.log("Promesse type ", promesse.compterendutype[0].typeID);
+      console.log(
+        "Promesse client  ",
+        promesse.compterendutype[0]
+          .suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ClientID
+      );
       await db.alerte
         .create({
           data: {
             message: `Promesse de regresse scheduled for today at ${promesse.date_ver}`,
             rapportid: promesse.compterendutype[0].compterenduid,
-            rapporttype: "promesseregresse",
+            rapporttype: promesse.compterendutype[0].typeID,
+            ClientId:
+              promesse.compterendutype[0]
+                .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
+                .ClientID,
           },
         })
         .then((res) => {
-          console.log(promesse.compterendutype[0]);
+          //console.log(promesse.compterendutype[0]);
           console.log("Alerts res", res);
         });
     }
@@ -53,7 +103,7 @@ const generateAlerts = async () => {
     //       data: {
     //         message: `Nonreconaissance scheduled for today at `,
     //         //rapportid: nonreconaissance.compterendutype[0].compterenduid,
-    //         rapporttype: "nonreconaissance",
+    //         //rapporttype: "nonreconaissance",
     //       },
     //     })
     //     .then((res) => {
@@ -62,19 +112,26 @@ const generateAlerts = async () => {
     // }
 
     const montantFacilites = await db.montantfacilite.findMany({
-      //where:{date_ech:today},
+      where: { date_ech: today },
       select: {
         mntech: true,
         date_ech: true,
+        facilitePaiment: {
+          include: {
+            compterendutype: true,
+          },
+        },
       },
     });
+
     for (const montantFacilite of montantFacilites) {
+      console.log("MontantFacilite  ", montantFacilite.facilitePaiment);
       await db.alerte
         .create({
           data: {
             message: `MontantFacilite scheduled for today at ${montantFacilite.date_ech} , montant : ${montantFacilite.mntech}`,
             // rapportid: montantFacilite.mntech,
-            rapporttype: "montantfacilite",
+            //rapporttype: "montantfacilite",
           },
         })
         .then((res) => {
