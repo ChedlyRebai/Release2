@@ -141,7 +141,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         id: true,
       },
     });
-    console.log(client);
+    console.log("sui", suiviAgenda);
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
         id: req.body.id,
@@ -155,12 +155,14 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         ClientID: client.id,
       },
     });
+    console.log("nouvelleCompteRendu", nouvelleCompteRendu);
+    console.log(nouvelleCompteRendu);
     if (type == 1) {
       const promesse = await db.promesseregresse.create({
         data: {
-          mnt_reg: mnt_reg,
-          lieu_ver: req.body.lieu_ver,
-          date_ver: req.body.date_ver,
+          mnt_reg: suiviAgenda.mnt_reg,
+          lieu_ver: suiviAgenda.lieu_ver,
+          date_ver: suiviAgenda.date_ver,
         },
       });
 
@@ -178,9 +180,9 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     if (type == 2) {
       const novellecoordonnee = await db.nouvellecoordonnees.create({
         data: {
-          nouv_te2: req.body.nouv_te2,
-          nouv_tel: req.body.nouv_tel,
-          nouv_adresse: req.body.nouv_adresse,
+          nouv_te2: suiviAgenda.nouv_tel2,
+          nouv_tel: suiviAgenda.nouv_tel,
+          nouv_adresse: suiviAgenda.nouv_adresse,
         },
       });
       const compterendutype = await db.compterendutype.create({
@@ -204,7 +206,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         },
       });
 
-      const montantFacilites = req.body.montantFacilites;
+      const montantFacilites = suiviAgenda.montantFacilites;
 
       await Promise.all(
         montantFacilites.map(async (montantFacilite: montantfacilite) => {
@@ -230,7 +232,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     if (type == 4) {
       const nonreconaissance = await db.nonreconaissance.create({
         data: {
-          observation: observation,
+          observation: suiviAgenda.observation,
         },
       });
       const compterendutype = await db.compterendutype.create({
@@ -246,9 +248,9 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     if (type == 5) {
       const visite = await db.visite.create({
         data: {
-          date_visite: req.body.date_visite,
-          h_rdv: req.body.h_rdv,
-          lieu_visite: req.body.lieu_visite,
+          date_visite: suiviAgenda.date_visite,
+          h_rdv: 2,
+          lieu_visite: suiviAgenda.lieu_visite,
         },
       });
       const compterendutype = await db.compterendutype.create({
@@ -271,7 +273,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         data: {
           compterenduid: nouvelleCompteRendu.id,
           ClientInjoignableId: clientInjoignable.id,
-          typeID: 5,
+          typeID: 6,
         },
       });
       return res.status(StatusCodes.OK).json(clientInjoignable);

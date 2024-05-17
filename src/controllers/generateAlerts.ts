@@ -22,11 +22,12 @@ const generateAlerts = async () => {
     }
 
     const promesses = await db.promesseregresse.findMany({
+      where: { date_ver: today },
       include: { compterendutype: true },
     });
 
     for (const promesse of promesses) {
-      console.log("Promesse  ", promesse.compterendutype[0]);
+      console.log("Promesse  ", promesse);
       await db.alerte
         .create({
           data: {
@@ -41,45 +42,45 @@ const generateAlerts = async () => {
         });
     }
 
-    const nonreconaissances = await db.nonreconaissance.findMany({
-      // where:{date_ver:today},
-      include: { compterendutype: true },
-    });
-    for (const nonreconaissance of nonreconaissances) {
-      console.log("Nonreconaissance  ", nonreconaissance.compterendutype[0]);
-      await db.alerte
-        .create({
-          data: {
-            message: `Nonreconaissance scheduled for today at `,
-            //rapportid: nonreconaissance.compterendutype[0].compterenduid,
-            rapporttype: "nonreconaissance",
-          },
-        })
-        .then((res) => {
-          console.log("Alerts res", res);
-        });
-    }
-
-    // const montantFacilites = await db.montantfacilite.findMany({
-    //   //where:{date_ech:today},
-    //   select: {
-    //     mntech: true,
-    //     date_ech: true,
-    //   },
+    // const nonreconaissances = await db.nonreconaissance.findMany({
+    //   where:{date_ver:today},
+    //   include: { compterendutype: true },
     // });
-    // for (const montantFacilite of montantFacilites) {
+    // for (const nonreconaissance of nonreconaissances) {
+    //   console.log("Nonreconaissance  ", nonreconaissance.compterendutype[0]);
     //   await db.alerte
     //     .create({
     //       data: {
-    //         message: `MontantFacilite scheduled for today at ${montantFacilite.date_ech} , montant : ${montantFacilite.mntech}`,
-    //         // rapportid: montantFacilite.mntech,
-    //         rapporttype: "montantfacilite",
+    //         message: `Nonreconaissance scheduled for today at `,
+    //         //rapportid: nonreconaissance.compterendutype[0].compterenduid,
+    //         rapporttype: "nonreconaissance",
     //       },
     //     })
     //     .then((res) => {
     //       console.log("Alerts res", res);
     //     });
     // }
+
+    const montantFacilites = await db.montantfacilite.findMany({
+      //where:{date_ech:today},
+      select: {
+        mntech: true,
+        date_ech: true,
+      },
+    });
+    for (const montantFacilite of montantFacilites) {
+      await db.alerte
+        .create({
+          data: {
+            message: `MontantFacilite scheduled for today at ${montantFacilite.date_ech} , montant : ${montantFacilite.mntech}`,
+            // rapportid: montantFacilite.mntech,
+            rapporttype: "montantfacilite",
+          },
+        })
+        .then((res) => {
+          console.log("Alerts res", res);
+        });
+    }
     console.log("Alerts generated successfully.");
   } catch (error) {
     console.error("Error generating alerts:", error);
