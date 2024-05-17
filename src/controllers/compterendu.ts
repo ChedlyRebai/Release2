@@ -200,7 +200,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         data: {
           id: randomInt(1, 1000),
           nb_ech: suiviAgenda.nb_ech,
-          mnt_rec: suiviAgenda.mnt_rec,
+          mnt_rec: suiviAgenda.mnt_plan,
           lieu_rec: suiviAgenda.lieu_rec,
           suiviagendaid: nouvelleCompteRendu.id,
         },
