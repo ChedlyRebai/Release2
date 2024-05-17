@@ -28,6 +28,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
             nom: true,
             tel1: true,
             tel2: true,
+            email: true,
           },
         },
         compterendutype: {
@@ -63,9 +64,35 @@ export const getAlertById = async (req: Request, res: Response) => {
       where: {
         id: Number(id),
       },
+      select: {
+        message: true,
+        id: true,
+        rapportid: true,
+        rapporttype: true,
+        ab_client: {
+          select: {
+            cli: true,
+            Agence: true,
+            Zone: true,
+            nom: true,
+            tel1: true,
+            tel2: true,
+            email: true,
+          },
+        },
+        compterendutype: {
+          select: {
+            types: {
+              select: {
+                libelle: true,
+              },
+            },
+          },
+        },
+      },
     });
     if (alerte) {
-      res.status(StatusCodes.OK).json(alerte);
+      res.status(StatusCodes.OK).type("json").send(json(alerte));
     } else {
       res.status(StatusCodes.NOT_FOUND).json({ message: "Alerte not found" });
     }

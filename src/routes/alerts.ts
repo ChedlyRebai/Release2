@@ -4,5 +4,5 @@ import { getAlertById, getAllAlerts } from "../controllers/alertes";
 const router: Router = express.Router();
 
 router.get("/all", getAllAlerts);
-router.get("/byid", getAlertById);
+router.get("/byid/:id", getAlertById);
 export default router;
