@@ -7,7 +7,7 @@ import cors from "cors";
 import clientroute from "./routes/clientroute";
 import compterenduroute from "./routes/compterendu";
 import lettreroute from "./routes/lettrerecouvrement";
-import "./controllers/cron"; // Import the cron module
+// import "./controllers/cron"; // Import the cron module
 import moment from "moment";
 
 const app = express();

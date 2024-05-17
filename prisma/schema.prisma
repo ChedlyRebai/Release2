@@ -941,8 +941,8 @@ model alerte {
   message         String           @db.VarChar(255)
   created_at      DateTime?        @default(now()) @db.Timestamptz(6)
   rapportid       Int?
-  rapporttype     Int?
   ClientId        BigInt?
+  rapporttype     Int?
   ab_client       ab_client?       @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   types           types?           @relation(fields: [rapporttype], references: [code], onDelete: NoAction, onUpdate: NoAction)
   compterendutype compterendutype? @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")

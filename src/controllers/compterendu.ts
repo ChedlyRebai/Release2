@@ -144,7 +144,6 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     console.log("sui", suiviAgenda);
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
-        id: req.body.id,
         num: 1,
         cli: cli,
         date_ag: new Date(),
@@ -199,9 +198,9 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     if (type == 3) {
       const newFacilitePaiment = await prisma.facilitePaiment.create({
         data: {
-          nb_ech: req.body.nb_ech,
-          mnt_rec: req.body.mnt_rec,
-          lieu_rec: req.body.lieu_rec,
+          nb_ech: suiviAgenda.nb_ech,
+          mnt_rec: suiviAgenda.mnt_rec,
+          lieu_rec: suiviAgenda.lieu_rec,
           suiviagendaid: nouvelleCompteRendu.id,
         },
       });
