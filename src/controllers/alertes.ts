@@ -31,21 +31,35 @@ export const getAllAlerts = async (req: Request, res: Response) => {
             email: true,
           },
         },
+
         types: {
           select: {
             libelle: true,
           },
         },
-
-        // compterendutype: {
-        //   select: {
-        //     types: {
-        //       select: {
-        //         libelle: true,
-        //       },
-        //     },
-        //   },
-        // },
+        comptrendutype: true,
+        suivi_agenda: {
+          select: {
+            compterendutype_compterendutype_compterenduidTosuivi_agenda: {
+              select: {
+                types: {
+                  select: {
+                    libelle: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        compterendutype: {
+          select: {
+            types: {
+              select: {
+                libelle: true,
+              },
+            },
+          },
+        },
       },
       skip: perPage * (page - 1),
       take: perPage,
