@@ -31,22 +31,28 @@ export const getAllAlerts = async (req: Request, res: Response) => {
             email: true,
           },
         },
-        compterendutype: {
+        types: {
           select: {
-            types: {
-              select: {
-                libelle: true,
-              },
-            },
+            libelle: true,
           },
         },
+
+        // compterendutype: {
+        //   select: {
+        //     types: {
+        //       select: {
+        //         libelle: true,
+        //       },
+        //     },
+        //   },
+        // },
       },
       skip: perPage * (page - 1),
       take: perPage,
     });
     const totalCount: number = await db.alerte.count({});
     const totalPages: number = Math.ceil(totalCount / perPage);
-
+    console.log("alertes:", alertes);
     const n: any = { alertes, totalCount, totalPages };
     res.status(StatusCodes.OK).type("json").send(json(n));
   } catch (error) {
@@ -80,15 +86,20 @@ export const getAlertById = async (req: Request, res: Response) => {
             email: true,
           },
         },
-        compterendutype: {
+        types: {
           select: {
-            types: {
-              select: {
-                libelle: true,
-              },
-            },
+            libelle: true,
           },
         },
+        // compterendutype: {
+        //   select: {
+        //     types: {
+        //       select: {
+        //         libelle: true,
+        //       },
+        //     },
+        //   },
+        // },
       },
     });
     if (alerte) {

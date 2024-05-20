@@ -136,7 +136,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
     const conmpterendutypes = await db.types.findMany();
     const client = await db.ab_client.findFirst({
       where: {
-        cli: "49105812036",
+        cli: cli,
       },
       select: {
         id: true,
@@ -214,6 +214,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           await prisma.montantfacilite.create({
             data: {
               ...montantFacilite,
+              id: randomInt(1, 1000),
               facilitePaimentId: newFacilitePaiment.id,
             },
           });
@@ -224,7 +225,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         data: {
           compterenduid: nouvelleCompteRendu.id,
           facilitePaimentId: newFacilitePaiment.id,
-          typeID: 2,
+          typeID: 3,
         },
       });
       console.log("compterendutype", compterendutype);

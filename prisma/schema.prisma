@@ -674,6 +674,7 @@ model suivi_agenda {
   appreciation                                                appreciation?     @relation(fields: [app_genId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   listechoix                                                  listechoix?       @relation(fields: [liste_choixId], references: [code], onDelete: NoAction, onUpdate: NoAction)
   motifimp                                                    Mott?             @relation(fields: [motifimpId], references: [codenv], onDelete: NoAction, onUpdate: NoAction)
+  alerte                                                      alerte[]
 }
 
 model visite {
@@ -945,10 +946,12 @@ model alerte {
   created_at      DateTime?        @default(now()) @db.Timestamptz(6)
   rapportid       Int?
   ClientId        BigInt?
+  comptrendutype  Int?
   rapporttype     Int?
   ab_client       ab_client?       @relation(fields: [ClientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   types           types?           @relation(fields: [rapporttype], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  compterendutype compterendutype? @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")
+  compterendutype compterendutype? @relation(fields: [comptrendutype], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "type_rapport")
+  suivi_agenda    suivi_agenda?    @relation(fields: [rapportid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rapport")
 }
 
 enum role {

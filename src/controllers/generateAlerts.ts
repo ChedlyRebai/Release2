@@ -31,16 +31,16 @@ const generateAlerts = async () => {
       },
     });
 
-    for (const visite of visites) {
-      console.log("vite  ", visite.compterendutype[0]);
-      await db.alerte.create({
-        data: {
-          message: `Visite scheduled for today at ${visite.date_visite}`,
-          rapportid: visite.compterendutype[0].compterenduid,
-          rapporttype: visite.compterendutype[0].typeID,
-        },
-      });
-    }
+    // for (const visite of visites) {
+    //   console.log("vite  ", visite.compterendutype[0]);
+    //   await db.alerte.create({
+    //     data: {
+    //       message: `Visite scheduled for today at ${visite.date_visite}`,
+    //       rapportid: visite.compterendutype[0].compterenduid,
+    //       rapporttype: visite.compterendutype[0].typeID,
+    //     },
+    //   });
+    // }
 
     const promesses = await db.promesseregresse.findMany({
       where: { date_ver: today },
@@ -68,7 +68,7 @@ const generateAlerts = async () => {
     console.log("Promesses ", promesses);
 
     for (const promesse of promesses) {
-      console.log("Promesse type ", promesse.compterendutype[0].typeID);
+      console.log("Promesse type ", promesse.compterendutype[0]);
       console.log(
         "Promesse client  ",
         promesse.compterendutype[0]
@@ -77,9 +77,9 @@ const generateAlerts = async () => {
       await db.alerte
         .create({
           data: {
-            message: `Promesse de regresse scheduled for today at ${promesse.date_ver}`,
-            rapportid: promesse.compterendutype[0].compterenduid,
-            rapporttype: promesse.compterendutype[0].typeID,
+            message: `Promesse de Reglement prévue aujourd'hui à: ${promesse.date_ver} , montant : ${promesse.mnt_reg} a ${promesse.Agence.libelle}`,
+            //rapportid: 54,
+            //rapporttype: promesse.compterendutype[0].typeID,
             ClientId:
               promesse.compterendutype[0]
                 .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
@@ -110,7 +110,7 @@ const generateAlerts = async () => {
     //       console.log("Alerts res", res);
     //     });
     // }
-
+    console.log("today", today);
     const montantFacilites = await db.montantfacilite.findMany({
       where: { date_ech: today },
       select: {
@@ -137,23 +137,26 @@ const generateAlerts = async () => {
     });
 
     for (const montantFacilite of montantFacilites) {
-      console.log("MontantFacilite  ", montantFacilite.facilitePaiment);
+      // console.log(
+      //   "MontantFacilite  ",
+      //   montantFacilite?.facilitePaiment.compterendutype[0].compterenduid
+      // );
       await db.alerte
         .create({
           data: {
-            message: `MontantFacilite scheduled for today at ${montantFacilite.date_ech} , montant : ${montantFacilite.mntech}`,
+            message: `paiement d'une échéance : ${montantFacilite?.date_ech} , montant : ${montantFacilite?.mntech} a`,
             rapportid:
-              montantFacilite.facilitePaiment.compterendutype[0].compterenduid,
+              montantFacilite?.facilitePaiment.compterendutype[0].compterenduid,
             rapporttype:
-              montantFacilite.facilitePaiment.compterendutype[0].typeID,
+              montantFacilite?.facilitePaiment.compterendutype[0].typeID,
             ClientId:
-              montantFacilite.facilitePaiment.compterendutype[0]
+              montantFacilite?.facilitePaiment.compterendutype[0]
                 .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
                 .ClientID,
           },
         })
         .then((res) => {
-          console.log("Alerts res", res);
+          // console.log("Alerts res", res);
         });
     }
     console.log("Alerts generated successfully.");
