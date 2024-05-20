@@ -77,7 +77,11 @@ const generateAlerts = async () => {
       await db.alerte
         .create({
           data: {
-            message: `Promesse de Reglement prévue aujourd'hui à: ${promesse.date_ver} , montant : ${promesse.mnt_reg} a ${promesse.Agence.libelle}`,
+            message: `Promesse de Reglement prévue aujourd'hui à: ${promesse.date_ver
+              .toString()
+              .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
+              promesse.Agence.libelle
+            }`,
             //rapportid: 54,
             //rapporttype: promesse.compterendutype[0].typeID,
             ClientId:
@@ -144,7 +148,9 @@ const generateAlerts = async () => {
       await db.alerte
         .create({
           data: {
-            message: `paiement d'une échéance : ${montantFacilite?.date_ech} , montant : ${montantFacilite?.mntech} a`,
+            message: `paiement d'une échéance : ${montantFacilite?.date_ech
+              .toString()
+              .substring(0, 10)} , montant : ${montantFacilite?.mntech} a`,
             rapportid:
               montantFacilite?.facilitePaiment.compterendutype[0].compterenduid,
             rapporttype:
