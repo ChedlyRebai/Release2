@@ -279,6 +279,8 @@ const getClientContacteByZoneAdminAgence = async (
       where: whereClose,
     });
     const totalPages = Math.ceil(totalCount / perPage);
+    console.log("total", lowerCaseResult, totalCount, totalPages, total._sum);
+
     return {
       result: lowerCaseResult,
       totalCount,
