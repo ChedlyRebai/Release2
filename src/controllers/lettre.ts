@@ -185,16 +185,15 @@ const getClientContacteByZoneAdminAgence = async (
       console.log("group");
       whereClose = {
         AND: [
-          {
-            OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
-          },
-          {
-            OR: [{ susp_lr: "N" }, { susp_lr: null }],
-          },
+          // {
+          //   OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
+          // },
+          // {
+          //   OR: [{ susp_lr: "N" }, { susp_lr: null }],
+          // },
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
-          { mnt_imp: { gte: montantLettreNumber } },
-          { phase: "C" },
-
+          // { mnt_imp: { gte: montantLettreNumber } },
+          // { phase: "C" },
           // { groupe: { in: ["910"] } },
         ],
       };
@@ -246,9 +245,9 @@ const getClientContacteByZoneAdminAgence = async (
       whereClose.age = agence;
     }
 
-    // if (search !== "") {
-    //   whereClose.nom = { contains: search.toLowerCase() };
-    // }
+    if (search !== "" && !isNaN(Number(search))) {
+      whereClose.cli = { equals: BigInt(search) };
+    }
 
     console.log(whereClose, "whereClose before result");
     const result = await db.ab_compte.findMany({
