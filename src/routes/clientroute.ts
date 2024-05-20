@@ -14,6 +14,7 @@ import {
   getMotifs,
   gethrdv,
 } from "../controllers/motif";
+import { clientInfo } from "../controllers/client";
 
 const router: Router = express.Router();
 
@@ -26,6 +27,8 @@ router.use(
   compression({ level: 9 }),
   getHistoriqueCompteRendu
 );
+
+router.get("/client", clientInfo);
 router.get("/motifs", getMotifs);
 router.get("/contact", contact);
 router.get("/appreciation", getAppreciation);
