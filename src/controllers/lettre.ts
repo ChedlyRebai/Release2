@@ -185,19 +185,20 @@ const getClientContacteByZoneAdminAgence = async (
       console.log("group");
       whereClose = {
         AND: [
-          // {
-          //   OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
-          // },
-          // {
-          //   OR: [{ susp_lr: "N" }, { susp_lr: null }],
-          // },
+          {
+            OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
+          },
+          {
+            OR: [{ susp_lr: "N" }, { susp_lr: null }],
+          },
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
-          // { mnt_imp: { gte: montantLettreNumber } },
-          // { phase: "C" },
+          //{ mnt_imp: { gte: montantLettreNumber } },
+          { phase: "C" },
           // { groupe: { in: ["910"] } },
         ],
       };
     }
+    console.log(montantLettreNumber, "montantLettreNumber");
     // if (matricule !== "1802") {
     //   const affectation = await getAffectation(matricule);
     //   whereClose = {
@@ -271,16 +272,17 @@ const getClientContacteByZoneAdminAgence = async (
     if (search !== "") {
       whereClose.nom = { contains: search.toLowerCase() };
     }
+
     const lowerCaseResult = result.map((item) => ({
       ...item,
       nom: item?.nom?.toLowerCase(),
     }));
+
     const totalCount = await db.ab_compte.count({
       where: whereClose,
     });
-    const totalPages = Math.ceil(totalCount / perPage);
-    console.log("total", lowerCaseResult, totalCount, totalPages, total._sum);
 
+    const totalPages = Math.ceil(totalCount / perPage);
     return {
       result: lowerCaseResult,
       totalCount,
@@ -303,9 +305,13 @@ export const toggleEtatLettre = async (req: Request, res: Response) => {
       },
       data: { etat_lettre: etat },
       select: {
+        ncp: true,
+        nom: true,
+        cli: true,
         etat_lettre: true,
       },
     });
+    console.log(lettre);
     return res.status(StatusCodes.OK).send(json(lettre));
   } catch (error) {
     console.error(error);
