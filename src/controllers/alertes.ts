@@ -31,6 +31,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
             email: true,
           },
         },
+        created_at: true,
 
         types: {
           select: {
