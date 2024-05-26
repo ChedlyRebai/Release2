@@ -89,6 +89,16 @@ export const getAlertById = async (req: Request, res: Response) => {
         id: true,
         rapportid: true,
         rapporttype: true,
+        created_at: true,
+        compterendutype: {
+          select: {
+            types: {
+              select: {
+                libelle: true,
+              },
+            },
+          },
+        },
         ab_client: {
           select: {
             cli: true,
