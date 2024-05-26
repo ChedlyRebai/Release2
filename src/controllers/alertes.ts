@@ -64,7 +64,11 @@ export const getAllAlerts = async (req: Request, res: Response) => {
       },
       skip: perPage * (page - 1),
       take: perPage,
+      orderBy: {
+        created_at: "desc",
+      },
     });
+
     const totalCount: number = await db.alerte.count({});
     const totalPages: number = Math.ceil(totalCount / perPage);
     console.log("alertes:", alertes);
