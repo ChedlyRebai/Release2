@@ -10,6 +10,7 @@ import lettreroute from "./routes/lettrerecouvrement";
 import "./controllers/cron"; // Import the cron module
 import moment from "moment";
 import alertsroute from "./routes/alerts";
+import "./controllers/mail";
 const app = express();
 
 app.use(
