@@ -143,3 +143,26 @@ export const getAlertById = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
+
+export const getTypes = async (req: Request, res: Response) => {
+  try {
+    const types = await db.alerte.findMany({
+      distinct: ["rapporttype"],
+      select: {
+        rapporttype: true,
+        types: {
+          select: {
+            libelle: true,
+          },
+        },
+      },
+    });
+
+    res.status(StatusCodes.OK).type("json").send(json(types));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+};
