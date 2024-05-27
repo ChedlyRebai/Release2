@@ -1,5 +1,6 @@
 import moment from "moment";
 import { db } from "../../prisma/db";
+import { SendEmail } from "./mail";
 
 const generateAlerts = async () => {
   const today = moment().toDate();
@@ -43,7 +44,6 @@ const generateAlerts = async () => {
     // }
 
     const promesses = await db.promesseregresse.findMany({
-      where: { date_ver: today },
       select: {
         date_ver: true,
         mnt_reg: true,
@@ -59,21 +59,21 @@ const generateAlerts = async () => {
             suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
               select: {
                 ClientID: true,
+                ab_client: {
+                  select: {
+                    nom: true,
+                    tel1: true,
+                    email: true,
+                  },
+                },
               },
             },
           },
         },
       },
     });
-    console.log("Promesses ", promesses);
 
     for (const promesse of promesses) {
-      console.log("Promesse type ", promesse.compterendutype[0]);
-      console.log(
-        "Promesse client  ",
-        promesse.compterendutype[0]
-          .suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ClientID
-      );
       await db.alerte
         .create({
           data: {
@@ -82,8 +82,8 @@ const generateAlerts = async () => {
               .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
               promesse.Agence.libelle
             }`,
-            //rapportid: 54,
-            //rapporttype: promesse.compterendutype[0].typeID,
+            rapportid: promesse.compterendutype[0].compterenduid,
+            rapporttype: promesse.compterendutype[0].typeID,
             ClientId:
               promesse.compterendutype[0]
                 .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
@@ -91,8 +91,14 @@ const generateAlerts = async () => {
           },
         })
         .then((res) => {
-          //console.log(promesse.compterendutype[0]);
-          console.log("Alerts res", res);
+          SendEmail(
+            `${promesse.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
+            `Promesse de Reglement`,
+            `Promesse de Reglement prévue :
+              ${promesse.date_ver.toLocaleDateString()} , montant :
+               ${promesse.mnt_reg} a 
+               ${promesse.Agence.libelle}`
+          );
         });
     }
 
@@ -114,23 +120,28 @@ const generateAlerts = async () => {
     //       console.log("Alerts res", res);
     //     });
     // }
-    console.log("today", today);
+
     const montantFacilites = await db.montantfacilite.findMany({
-      where: { date_ech: today },
       select: {
         mntech: true,
         date_ech: true,
         facilitePaiment: {
           select: {
             suiviagendaid: true,
-
+            Agence: {
+              select: {
+                libelle: true,
+              },
+            },
             compterendutype: {
               select: {
                 compterenduid: true,
                 typeID: true,
+
                 suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
                   select: {
                     ClientID: true,
+                    ab_client: true,
                   },
                 },
               },
@@ -139,7 +150,7 @@ const generateAlerts = async () => {
         },
       },
     });
-
+    // console.log("montantFacilites", montantFacilites);
     for (const montantFacilite of montantFacilites) {
       // console.log(
       //   "MontantFacilite  ",
@@ -163,7 +174,15 @@ const generateAlerts = async () => {
           },
         })
         .then((res) => {
-          // console.log("Alerts res", res);
+          SendEmail(
+            `${montantFacilite?.facilitePaiment.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
+            `paiement d'une échéance : 
+             `,
+            `paiement d'une échéance :
+              ${montantFacilite?.date_ech.toLocaleDateString()} , montant :
+               ${montantFacilite?.mntech} a 
+               ${montantFacilite?.facilitePaiment.Agence.libelle}`
+          );
         });
     }
     console.log("Alerts generated successfully.");
