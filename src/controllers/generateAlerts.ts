@@ -77,7 +77,7 @@ const generateAlerts = async () => {
       await db.alerte
         .create({
           data: {
-            message: `Promesse de Reglement prévue aujourd'hui à: ${promesse.date_ver
+            message: `Promesse de Reglement prévue : ${promesse.date_ver
               .toString()
               .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
               promesse.Agence.libelle
@@ -148,6 +148,7 @@ const generateAlerts = async () => {
       await db.alerte
         .create({
           data: {
+            //create alerte message for each montantFacilite
             message: `paiement d'une échéance : ${montantFacilite?.date_ech
               .toString()
               .substring(0, 10)} , montant : ${montantFacilite?.mntech} a`,

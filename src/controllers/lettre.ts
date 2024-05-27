@@ -88,41 +88,27 @@ const getClientContacteByZoneAdminAgence = async (
   try {
     let whereClose: any = {};
     console.log(matricule);
-    const jour = await db.ab_param.findFirst({
+    const lettre = await db.ab_param.findFirst({
       where: {
         code: "LETTRE",
       },
       select: {
         jour: true,
-      },
-    });
-
-    const jourf = await db.ab_param.findFirst({
-      where: {
-        code: "LETTRE",
-      },
-      select: {
         jourf: true,
-      },
-    });
-
-    const montant_lettre = await db.ab_param.findFirst({
-      where: {
-        code: "LETTRE",
-      },
-      select: {
         montant_lettre: true,
       },
     });
 
+    const jourf = lettre?.jourf;
+    const jour = lettre?.jour;
+    const montant_lettre = lettre?.montant_lettre;
+
     console.log(jour, jourf, montant_lettre);
-    const montantLettreNumber = Number(
-      montant_lettre?.montant_lettre?.toString()
-    );
+    const montantLettreNumber = Number(montant_lettre?.toString());
     // const montantLettreNumber=0
     // const jourNumber = 0;
-    const jourNumber = Number(jour?.jour?.toString());
-    const jourfNumber = Number(jourf?.jourf?.toString());
+    const jourNumber = Number(jour?.toString());
+    const jourfNumber = Number(jourf?.toString());
     //const jourfNumber = 0;
 
     const affectation = await db.affecterA.findFirst({
