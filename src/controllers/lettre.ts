@@ -220,9 +220,10 @@ const getClientContacteByZoneAdminAgence = async (
     //   };
     // }
 
-    if (search !== undefined || search !== "") {
-      whereClose.cli = { contains: search };
-    }
+    // if (search !== undefined || search !== "") {
+    //   whereClose.cli = { contains: search };
+    // }
+    console.log("eeee", search, "whereClose before result");
 
     if (to !== 0) {
       whereClose.nombre_jours = { lte: to, gte: from };
