@@ -55,7 +55,7 @@ export const getLettres = async (req: Request, res: Response) => {
       to
     );
 
-    const clients = await getClientContacteByZoneAdminAgence(
+    const clients = await getLettre(
       user.matricule,
       perPage,
       page,
@@ -75,7 +75,7 @@ export const getLettres = async (req: Request, res: Response) => {
   }
 };
 
-const getClientContacteByZoneAdminAgence = async (
+const getLettre = async (
   matricule: string,
   perPage: number,
   page: number,
@@ -86,7 +86,9 @@ const getClientContacteByZoneAdminAgence = async (
   to: number
 ) => {
   try {
-    let whereClose: any = {};
+    let whereClose: any = {
+      ab_client: {},
+    };
     console.log(matricule);
     const lettre = await db.ab_param.findFirst({
       where: {
@@ -150,6 +152,7 @@ const getClientContacteByZoneAdminAgence = async (
     if (Number(affectation.TypeAffectation) === 1) {
       //agence
       console.log("agence");
+
       whereClose = {
         AND: [
           {
@@ -166,8 +169,11 @@ const getClientContacteByZoneAdminAgence = async (
         ],
       };
     }
+
     if (Number(affectation.TypeAffectation) === 3) {
       //grooup
+      console.log(search, "search before result");
+
       console.log("group");
       whereClose = {
         AND: [
@@ -185,46 +191,11 @@ const getClientContacteByZoneAdminAgence = async (
       };
     }
     console.log(montantLettreNumber, "montantLettreNumber");
-    // if (matricule !== "1802") {
-    //   const affectation = await getAffectation(matricule);
-    //   whereClose = {
-    //     AND: [
-    //       {
-    //         OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
-    //       },
-    //       {
-    //         OR: [{ susp_lr: "N" }, { susp_lr: null }],
-    //       },
-    //       // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
-    //       { mnt_imp: { gte: montantLettreNumber } },
-    //       { phase: "C" },
-    //       // { groupe: { in: ["910"] } },
-    //     ],
-    //   };
-    // }
-
-    // if (matricule === "1802") {
-    //   whereClose = {
-    //     AND: [
-    //       {
-    //         OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
-    //       },
-    //       {
-    //         OR: [{ susp_lr: "N" }, { susp_lr: null }],
-    //       },
-    //       // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
-
-    //       { mnt_imp: { gte: montantLettreNumber } },
-    //       { phase: "C" },
-    //     ],
-    //   };
-    // }
-
-    // if (search !== undefined || search !== "") {
-    //   whereClose.cli = { contains: search };
-    // }
     console.log("eeee", search, "whereClose before result");
 
+    if (search !== undefined && search !== "") {
+      whereClose.cli = { equals: BigInt(search) };
+    }
     if (to !== 0) {
       whereClose.nombre_jours = { lte: to, gte: from };
     }
@@ -237,14 +208,60 @@ const getClientContacteByZoneAdminAgence = async (
       whereClose.age = agence;
     }
 
-    if (search !== "" && !isNaN(Number(search))) {
-      whereClose.cli = { equals: BigInt(search) };
-    }
+    // if (search !== "" && !isNaN(Number(search))) {
+    //   whereClose.cli = { equals: BigInt(search) };
+    // }
+    // if (search !== undefined || search !== "") {
+    //   whereClose.cli = { contains: search };
+    // }
 
     console.log(whereClose, "whereClose before result");
     const result = await db.ab_compte.findMany({
       where: whereClose,
-      select: SELECT_FIELDS,
+      select: {
+        cli: true,
+        age: true,
+        nom: true,
+        groupe: true,
+        nombre_jours: true,
+        nombre_jours_sdb: true,
+        phase: true,
+        etat_lettre: true,
+        susp_lr: true,
+        mnt_imp: true,
+        mnt_sdb: true,
+        tot_creance: true,
+        max_nbj: true,
+        tot_eng: true,
+        depassement: true,
+        ncp: true,
+        nbre_imp: true,
+        Agence: true,
+        ab_client: {
+          select: {
+            Agence: true,
+            cli: true,
+            nom: true,
+            tel1: true,
+            tel2: true,
+            email: true,
+            groupe: true,
+            nombre_jours: true,
+            nombre_jours_sdb: true,
+            phase: true,
+            etat_lettre: true,
+            susp_lr: true,
+            mnt_imp: true,
+
+            tot_creance: true,
+            max_nbj: true,
+
+            depassement: true,
+
+            nbre_imp: true,
+          },
+        },
+      },
       skip: perPage * (page - 1),
       take: perPage,
     });
@@ -260,9 +277,9 @@ const getClientContacteByZoneAdminAgence = async (
       _count: true,
     });
 
-    if (search !== "") {
-      whereClose.nom = { contains: search.toLowerCase() };
-    }
+    // if (search !== "") {
+    //   whereClose.nom = { contains: search.toLowerCase() };
+    // }
 
     const lowerCaseResult = result.map((item) => ({
       ...item,
