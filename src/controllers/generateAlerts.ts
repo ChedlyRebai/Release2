@@ -44,66 +44,68 @@ const generateAlerts = async () => {
     //   });
     // }
 
-    // const promesses = await db.promesseregresse.findMany({
-    //   where: { date_ver: today },
-    //   select: {
-    //     date_ver: true,
-    //     mnt_reg: true,
-    //     Agence: {
-    //       select: {
-    //         libelle: true,
-    //       },
-    //     },
-    //     compterendutype: {
-    //       select: {
-    //         compterenduid: true,
-    //         typeID: true,
-    //         suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
-    //           select: {
-    //             ClientID: true,
-    //             ab_client: {
-    //               select: {
-    //                 nom: true,
-    //                 tel1: true,
-    //                 email: true,
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
+    const promesses = await db.promesseregresse.findMany({
+      where: { date_ver: today },
+      select: {
+        date_ver: true,
+        mnt_reg: true,
+        Agence: {
+          select: {
+            libelle: true,
+          },
+        },
+        compterendutype: {
+          select: {
+            compterenduid: true,
+            typeID: true,
+            suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+              select: {
+                ClientID: true,
+                ab_client: {
+                  select: {
+                    nom: true,
+                    tel1: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
 
-    // for (const promesse of promesses) {
-    //   await db.alerte
-    //     .create({
-    //       data: {
-    //         message: `Promesse de Reglement prévue : ${promesse.date_ver
-    //           .toString()
-    //           .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
-    //           promesse.Agence.libelle
-    //         }`,
+    for (const promesse of promesses) {
+      const message = `Une promesse de règlement est prévue le ${promesse.date_ver.toLocaleDateString()} avec un montant de ${
+        promesse.mnt_reg
+      } à ${promesse.Agence.libelle}`;
 
-    //         rapportid: promesse.compterendutype[0].compterenduid,
-    //         rapporttype: promesse.compterendutype[0].typeID,
-    //         ClientId:
-    //           promesse.compterendutype[0]
-    //             .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
-    //             .ClientID,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       SendEmail(
-    //         `${promesse.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
-    //         `Promesse de Reglement`,
-    //         `Promesse de Reglement prévue :
-    //           ${promesse.date_ver.toLocaleDateString()} , montant :
-    //            ${promesse.mnt_reg} a
-    //            ${promesse.Agence.libelle}`
-    //       );
-    //     });
-    // }
+      await db.alerte
+        .create({
+          data: {
+            message: message,
+            rapportid: promesse.compterendutype[0].compterenduid,
+            rapporttype: promesse.compterendutype[0].typeID,
+            ClientId:
+              promesse.compterendutype[0]
+                .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
+                .ClientID,
+          },
+        })
+        .then((res) => {
+          const Clientmessage = `Cher client, une promesse de règlement est prévue le ${promesse.date_ver.toLocaleDateString()} avec un montant de ${
+            promesse.mnt_reg
+          } à ${
+            promesse.Agence.libelle
+          }. Veuillez vous assurer de compléter le paiement à temps. Merci.`;
+
+          SendEmail(
+            `${promesse.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
+            `Rappel de Promesse de Règlement`,
+            Clientmessage
+          );
+        });
+    }
 
     // const nonreconaissances = await db.nonreconaissance.findMany({
     //   where:{date_ver:today},
@@ -125,6 +127,7 @@ const generateAlerts = async () => {
     // }
 
     const montantFacilites = await db.montantfacilite.findMany({
+      where: { date_ech: today },
       select: {
         mntech: true,
         date_ech: true,
@@ -154,19 +157,17 @@ const generateAlerts = async () => {
       },
     });
     // console.log("montantFacilites", montantFacilites);
+    // ...
+
     for (const montantFacilite of montantFacilites) {
-      // console.log(
-      //   "MontantFacilite  ",
-      //   montantFacilite?.facilitePaiment.compterendutype[0].compterenduid
-      // );
-      console.log("agence", montantFacilite?.facilitePaiment.Agence.libelle);
+      const message = `Un paiement d'une échéance est dû le ${montantFacilite?.date_ech.toLocaleDateString()} avec un montant de ${
+        montantFacilite?.mntech
+      } à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
+
       await db.alerte
         .create({
           data: {
-            //create alerte message for each montantFacilite
-            message: `paiement d'une échéance : ${montantFacilite?.date_ech
-              .toString()
-              .substring(0, 10)} , montant : ${montantFacilite?.mntech} a`,
+            message: message,
             rapportid:
               montantFacilite?.facilitePaiment.compterendutype[0].compterenduid,
             rapporttype:
@@ -177,18 +178,21 @@ const generateAlerts = async () => {
                 .ClientID,
           },
         })
+
         .then((res) => {
+          const clientMessage = `Un paiement d'une échéance est dû le ${montantFacilite?.date_ech.toLocaleDateString()} avec un montant de ${
+            montantFacilite?.mntech
+          } à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
+
           SendEmail(
             `${montantFacilite?.facilitePaiment.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
-            `paiement d'une échéance : 
-             `,
-            `paiement d'une échéance :
-              ${montantFacilite?.date_ech.toLocaleDateString()} , montant :
-               ${montantFacilite?.mntech} a 
-               ${montantFacilite?.facilitePaiment.Agence.libelle}`
+            `Rappel de paiement`,
+            clientMessage
           );
         });
     }
+
+    // ...
     console.log("Alerts generated successfully.");
   } catch (error) {
     console.error("Error generating alerts:", error);
