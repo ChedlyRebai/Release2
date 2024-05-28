@@ -14,7 +14,37 @@ export const getAllAlerts = async (req: Request, res: Response) => {
   const search = String(req.query.search) || "";
 
   try {
+    const affectation = await db.affecterA.findFirst({
+      where: {
+        Utilisateur: {
+          usr_matricule: user.matricule,
+        },
+      },
+      select: {
+        TypeAffectation: true,
+        TypesAffectation: true,
+        Agence: true,
+        Zone: true,
+      },
+    });
+    let whereClose: any = {
+      ab_client: {},
+    };
+
+    if (Number(affectation.TypeAffectation) === 4) {
+      //grooup
+      console.log("group");
+      whereClose.ab_client.Zone = affectation.Zone;
+    }
+    if (Number(affectation.TypeAffectation) === 1) {
+      //agence
+      console.log("agence");
+      whereClose.ab_client.Agence = affectation.Agence;
+    }
+    console.log("affectation:", affectation);
+    console.log("whereClose:", whereClose);
     const alertes = await db.alerte.findMany({
+      where: whereClose,
       select: {
         message: true,
         id: true,
@@ -32,7 +62,6 @@ export const getAllAlerts = async (req: Request, res: Response) => {
           },
         },
         created_at: true,
-
         types: {
           select: {
             libelle: true,
@@ -62,6 +91,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
           },
         },
       },
+
       skip: perPage * (page - 1),
       take: perPage,
       orderBy: {
