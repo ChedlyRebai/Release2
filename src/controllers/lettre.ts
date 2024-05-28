@@ -31,6 +31,31 @@ const SELECT_FIELDS = {
   ncp: true,
   nbre_imp: true,
   Agence: true,
+  ab_client: {
+    select: {
+      Agence: true,
+      cli: true,
+      nom: true,
+      tel1: true,
+      tel2: true,
+      email: true,
+      groupe: true,
+      nombre_jours: true,
+      nombre_jours_sdb: true,
+      phase: true,
+      etat_lettre: true,
+      susp_lr: true,
+      mnt_imp: true,
+
+      Zone: true,
+      tot_creance: true,
+      max_nbj: true,
+
+      depassement: true,
+
+      nbre_imp: true,
+    },
+  },
 };
 
 export const getLettres = async (req: Request, res: Response) => {
@@ -218,50 +243,7 @@ const getLettre = async (
     console.log(whereClose, "whereClose before result");
     const result = await db.ab_compte.findMany({
       where: whereClose,
-      select: {
-        cli: true,
-        age: true,
-        nom: true,
-        groupe: true,
-        nombre_jours: true,
-        nombre_jours_sdb: true,
-        phase: true,
-        etat_lettre: true,
-        susp_lr: true,
-        mnt_imp: true,
-        mnt_sdb: true,
-        tot_creance: true,
-        max_nbj: true,
-        tot_eng: true,
-        depassement: true,
-        ncp: true,
-        nbre_imp: true,
-        Agence: true,
-        ab_client: {
-          select: {
-            Agence: true,
-            cli: true,
-            nom: true,
-            tel1: true,
-            tel2: true,
-            email: true,
-            groupe: true,
-            nombre_jours: true,
-            nombre_jours_sdb: true,
-            phase: true,
-            etat_lettre: true,
-            susp_lr: true,
-            mnt_imp: true,
-
-            tot_creance: true,
-            max_nbj: true,
-
-            depassement: true,
-
-            nbre_imp: true,
-          },
-        },
-      },
+      select: SELECT_FIELDS,
       skip: perPage * (page - 1),
       take: perPage,
     });
