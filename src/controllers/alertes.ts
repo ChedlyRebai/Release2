@@ -18,49 +18,49 @@ export const getAllAlerts = async (req: Request, res: Response) => {
       select: {
         message: true,
         id: true,
-        rapportid: true,
-        rapporttype: true,
-        ab_client: {
-          select: {
-            cli: true,
-            Agence: true,
-            Zone: true,
-            nom: true,
-            tel1: true,
-            tel2: true,
-            email: true,
-          },
-        },
-        created_at: true,
+        // rapportid: true,
+        // rapporttype: true,
+        // ab_client: {
+        //   select: {
+        //     cli: true,
+        //     Agence: true,
+        //     Zone: true,
+        //     nom: true,
+        //     tel1: true,
+        //     tel2: true,
+        //     email: true,
+        //   },
+        // },
+        // created_at: true,
 
-        types: {
-          select: {
-            libelle: true,
-          },
-        },
-        comptrendutype: true,
-        suivi_agenda: {
-          select: {
-            compterendutype_compterendutype_compterenduidTosuivi_agenda: {
-              select: {
-                types: {
-                  select: {
-                    libelle: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        compterendutype: {
-          select: {
-            types: {
-              select: {
-                libelle: true,
-              },
-            },
-          },
-        },
+        // types: {
+        //   select: {
+        //     libelle: true,
+        //   },
+        // },
+        // comptrendutype: true,
+        // suivi_agenda: {
+        //   select: {
+        //     compterendutype_compterendutype_compterenduidTosuivi_agenda: {
+        //       select: {
+        //         types: {
+        //           select: {
+        //             libelle: true,
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
+        // compterendutype: {
+        //   select: {
+        //     types: {
+        //       select: {
+        //         libelle: true,
+        //       },
+        //     },
+        //   },
+        // },
       },
       skip: perPage * (page - 1),
       take: perPage,
@@ -71,6 +71,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
 
     const totalCount: number = await db.alerte.count({});
     const totalPages: number = Math.ceil(totalCount / perPage);
+    console.log("totalPages:", page);
     console.log("alertes:", alertes);
     const n: any = { alertes, totalCount, totalPages };
     res.status(StatusCodes.OK).type("json").send(json(n));
