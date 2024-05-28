@@ -71,8 +71,7 @@ export const getAllAlerts = async (req: Request, res: Response) => {
 
     const totalCount: number = await db.alerte.count({});
     const totalPages: number = Math.ceil(totalCount / perPage);
-    console.log("Pages:", page);
-    console.log("alertes:", alertes);
+
     const n: any = { alertes, totalCount, totalPages };
     res.status(StatusCodes.OK).type("json").send(json(n));
   } catch (error) {

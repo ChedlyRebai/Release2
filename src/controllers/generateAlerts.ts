@@ -1,36 +1,37 @@
 import moment from "moment";
 import { db } from "../../prisma/db";
 import { SendEmail } from "./mail";
+import { log } from "console";
 
 const generateAlerts = async () => {
   const today = moment().toDate();
 
   try {
-    const visites = await db.visite.findMany({
-      where: { date_visite: today },
-      select: {
-        date_visite: true,
-        h_rdv: true,
-        lieu_visite: true,
+    // const visites = await db.visite.findMany({
+    //   where: { date_visite: today },
+    //   select: {
+    //     date_visite: true,
+    //     h_rdv: true,
+    //     lieu_visite: true,
 
-        Agence: {
-          select: {
-            libelle: true,
-          },
-        },
-        compterendutype: {
-          select: {
-            compterenduid: true,
-            typeID: true,
-            suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
-              select: {
-                ClientID: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    //     Agence: {
+    //       select: {
+    //         libelle: true,
+    //       },
+    //     },
+    //     compterendutype: {
+    //       select: {
+    //         compterenduid: true,
+    //         typeID: true,
+    //         suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+    //           select: {
+    //             ClientID: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
 
     // for (const visite of visites) {
     //   console.log("vite  ", visite.compterendutype[0]);
@@ -43,64 +44,66 @@ const generateAlerts = async () => {
     //   });
     // }
 
-    const promesses = await db.promesseregresse.findMany({
-      select: {
-        date_ver: true,
-        mnt_reg: true,
-        Agence: {
-          select: {
-            libelle: true,
-          },
-        },
-        compterendutype: {
-          select: {
-            compterenduid: true,
-            typeID: true,
-            suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
-              select: {
-                ClientID: true,
-                ab_client: {
-                  select: {
-                    nom: true,
-                    tel1: true,
-                    email: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    // const promesses = await db.promesseregresse.findMany({
+    //   where: { date_ver: today },
+    //   select: {
+    //     date_ver: true,
+    //     mnt_reg: true,
+    //     Agence: {
+    //       select: {
+    //         libelle: true,
+    //       },
+    //     },
+    //     compterendutype: {
+    //       select: {
+    //         compterenduid: true,
+    //         typeID: true,
+    //         suivi_agenda_compterendutype_compterenduidTosuivi_agenda: {
+    //           select: {
+    //             ClientID: true,
+    //             ab_client: {
+    //               select: {
+    //                 nom: true,
+    //                 tel1: true,
+    //                 email: true,
+    //               },
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
 
-    for (const promesse of promesses) {
-      await db.alerte
-        .create({
-          data: {
-            message: `Promesse de Reglement prévue : ${promesse.date_ver
-              .toString()
-              .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
-              promesse.Agence.libelle
-            }`,
-            rapportid: promesse.compterendutype[0].compterenduid,
-            rapporttype: promesse.compterendutype[0].typeID,
-            ClientId:
-              promesse.compterendutype[0]
-                .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
-                .ClientID,
-          },
-        })
-        .then((res) => {
-          SendEmail(
-            `${promesse.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
-            `Promesse de Reglement`,
-            `Promesse de Reglement prévue :
-              ${promesse.date_ver.toLocaleDateString()} , montant :
-               ${promesse.mnt_reg} a 
-               ${promesse.Agence.libelle}`
-          );
-        });
-    }
+    // for (const promesse of promesses) {
+    //   await db.alerte
+    //     .create({
+    //       data: {
+    //         message: `Promesse de Reglement prévue : ${promesse.date_ver
+    //           .toString()
+    //           .substring(0, 10)} , montant : ${promesse.mnt_reg} a ${
+    //           promesse.Agence.libelle
+    //         }`,
+
+    //         rapportid: promesse.compterendutype[0].compterenduid,
+    //         rapporttype: promesse.compterendutype[0].typeID,
+    //         ClientId:
+    //           promesse.compterendutype[0]
+    //             .suivi_agenda_compterendutype_compterenduidTosuivi_agenda
+    //             .ClientID,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       SendEmail(
+    //         `${promesse.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
+    //         `Promesse de Reglement`,
+    //         `Promesse de Reglement prévue :
+    //           ${promesse.date_ver.toLocaleDateString()} , montant :
+    //            ${promesse.mnt_reg} a
+    //            ${promesse.Agence.libelle}`
+    //       );
+    //     });
+    // }
 
     // const nonreconaissances = await db.nonreconaissance.findMany({
     //   where:{date_ver:today},
@@ -156,6 +159,7 @@ const generateAlerts = async () => {
       //   "MontantFacilite  ",
       //   montantFacilite?.facilitePaiment.compterendutype[0].compterenduid
       // );
+      console.log("agence", montantFacilite?.facilitePaiment.Agence.libelle);
       await db.alerte
         .create({
           data: {
