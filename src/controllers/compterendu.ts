@@ -142,6 +142,14 @@ export const createCompteRendu = async (req: Request, res: Response) => {
         id: true,
       },
     });
+    await db.ab_client.update({
+      where: {
+        cli: cli,
+      },
+      data: {
+        trt: "O",
+      },
+    });
 
     const nouvelleCompteRendu = await db.suivi_agenda.create({
       data: {
