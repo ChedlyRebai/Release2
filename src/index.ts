@@ -19,7 +19,6 @@ app.use(
   })
 );
 app.use(compression({ level: 9 }));
-
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/client", clientroute);

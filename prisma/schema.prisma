@@ -404,6 +404,7 @@ model ab_client {
   matricule_trf_propose_v   String?        @db.VarChar(4)
   matricule_valid_strat_d   String?        @db.VarChar(4)
   matricule_prop_modif_susp String?        @db.VarChar(4)
+  addresse                  String?
   id                        BigInt         @unique @default(autoincrement())
   created_at                DateTime?      @default(now()) @db.Timestamp(6)
   updated_at                DateTime?      @default(now()) @db.Timestamp(6)

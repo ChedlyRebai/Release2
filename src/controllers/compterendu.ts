@@ -184,6 +184,16 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           nouv_adresse: suiviAgenda.nouv_adresse,
         },
       });
+      await db.ab_client.update({
+        where: {
+          cli: cli,
+        },
+        data: {
+          tel1: suiviAgenda.nouv_tel,
+          tel2: suiviAgenda.nouv_tel2,
+          addresse: suiviAgenda.nouv_adresse,
+        },
+      });
       const compterendutype = await db.compterendutype.create({
         data: {
           compterenduid: nouvelleCompteRendu.id,
