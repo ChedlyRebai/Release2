@@ -42,13 +42,28 @@ export const getCompterendu = async (req: Request, res: Response) => {
 
 export const getListCompte = async (req: Request, res: Response) => {
   try {
-    const cli = Number(req.query.cli);
+    const cli = String(req.query.cli);
     const listCompte = await db.ab_compte.findMany({
       where: {
-        cli: cli,
+        ab_client: {
+          cli: cli,
+        },
       },
       select: {
-        age: true,
+        ab_client: {
+          select: {
+            cli: true,
+            nom: true,
+            mnt_imp: true,
+            tel1: true,
+            tel2: true,
+            addresse: true,
+            email: true,
+            trt: true,
+            id: true,
+          },
+        },
+
         cli: true,
         ncp: true,
         nom: true,
