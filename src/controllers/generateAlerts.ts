@@ -78,7 +78,7 @@ const generateAlerts = async () => {
     for (const promesse of promesses) {
       const message = `Une promesse de règlement est prévue le ${promesse.date_ver.toLocaleDateString()} avec un montant de ${
         promesse.mnt_reg
-      } à ${promesse.Agence.libelle}`;
+      } DT à ${promesse.Agence.libelle}`;
 
       await db.alerte
         .create({
@@ -95,7 +95,7 @@ const generateAlerts = async () => {
         .then((res) => {
           const Clientmessage = `Cher client, une promesse de règlement est prévue le ${promesse.date_ver.toLocaleDateString()} avec un montant de ${
             promesse.mnt_reg
-          } à ${
+          }DT à ${
             promesse.Agence.libelle
           }. Veuillez vous assurer de compléter le paiement à temps. Merci.`;
 
@@ -162,7 +162,7 @@ const generateAlerts = async () => {
     for (const montantFacilite of montantFacilites) {
       const message = `Un paiement d'une échéance est dû le ${montantFacilite?.date_ech.toLocaleDateString()} avec un montant de ${
         montantFacilite?.mntech
-      } à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
+      } DT à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
 
       await db.alerte
         .create({
@@ -182,7 +182,7 @@ const generateAlerts = async () => {
         .then((res) => {
           const clientMessage = `Un paiement d'une échéance est dû le ${montantFacilite?.date_ech.toLocaleDateString()} avec un montant de ${
             montantFacilite?.mntech
-          } à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
+          } DT à ${montantFacilite?.facilitePaiment.Agence.libelle}.`;
 
           SendEmail(
             `${montantFacilite?.facilitePaiment.compterendutype[0].suivi_agenda_compterendutype_compterenduidTosuivi_agenda.ab_client.email}`,
