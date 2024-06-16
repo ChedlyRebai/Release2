@@ -8,8 +8,8 @@
   ],
   "crons": [
     {
-      "path": "/api/cron",
-      "schedule": "20 01 * * *"
+      "path": "/cron",
+      "schedule": "26 01 * * *"
     },
     {
         "path": "/api/cron.ts",
