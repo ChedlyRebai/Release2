@@ -12,6 +12,7 @@ import moment from "moment";
 import alertsroute from "./routes/alerts";
 import "./controllers/mail";
 import generateAlerts from "./controllers/generateAlerts";
+import { cron } from "../src/controllers/cron";
 const app = express();
 
 app.use(
@@ -25,7 +26,7 @@ app.use(bodyParser.json());
 app.use("/client", clientroute);
 app.use("/compterendu", compterenduroute);
 app.use("/alerts", alertsroute);
-app.use("/cron", generateAlerts);
+app.use("/cron", cron);
 // compterendu/createcompterendu
 const today = moment().toDate();
 
