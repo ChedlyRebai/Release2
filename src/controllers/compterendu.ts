@@ -246,7 +246,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           await prisma.montantfacilite.create({
             data: {
               ...montantFacilite,
-              id: randomInt(1, 1000),
+              //id: randomInt(1, 99999999),
               facilitePaimentId: newFacilitePaiment.id,
             },
           });
