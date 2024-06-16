@@ -4,7 +4,7 @@ import cron from "node-cron";
 import generateAlerts from "../controllers/generateAlerts";
 
 // Schedule the script to run every day at midnight
-cron.schedule("07 01 * * *", () => {
+cron.schedule("09 01 * * *", () => {
   console.log("Running generateAlerts.ts script...");
   generateAlerts()
     .then(() => {
