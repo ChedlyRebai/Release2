@@ -35,6 +35,7 @@ const SELECT_FIELDS = {
     select: {
       Agence: true,
       cli: true,
+      id: true,
       nom: true,
       tel1: true,
       tel2: true,

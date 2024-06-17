@@ -27,7 +27,6 @@ app.use("/client", clientroute);
 app.use("/compterendu", compterenduroute);
 app.use("/alerts", alertsroute);
 app.use("/cron", cron);
-// compterendu/createcompterendu
 const today = moment().toDate();
 
 console.log("today", today);
@@ -35,8 +34,8 @@ app.use("/lettre", lettreroute);
 
 const server = http.createServer(app);
 
-server.listen(10001, () => {
-  console.log("Sprint2 running on http://localhost:10001", today);
+server.listen(10002, () => {
+  console.log("Sprint2 running on http://localhost:10002", today);
 });
 
 export default app;
