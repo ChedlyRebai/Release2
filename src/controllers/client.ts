@@ -1,11 +1,6 @@
-import { Result } from "arg";
 import { Request, Response } from "express";
-
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import { db } from "../../prisma/db";
-import { group } from "console";
-import { ab_client } from "@prisma/client";
 import { json } from "./../../public/utils";
 
 const getAffectation = async (matricule: string) => {
@@ -33,28 +28,6 @@ const SELECT_FIELDS = {
   tel1: true,
   tel2: true,
 };
-
-// export const getAllLinks = async (req: Request, res: Response) => {
-//   try {
-//     const links = await db.droit_accees.groupBy({
-//       by: ["nom"],
-//       where: {
-//         code_fonction: 14,
-//         acces: "O",
-//       },
-//     });
-
-//     const linksName = links.map((link) => link.nom);
-
-//     console.log(linksName);
-//     return res.status(StatusCodes.OK).json(linksName);
-//   } catch (error) {
-//     console.error(error);
-//     res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: "Internal Server Error" });
-//   }
-// };
 
 export const clientInfo = async (req: Request, res: Response) => {
   try {

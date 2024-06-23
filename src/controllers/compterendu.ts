@@ -102,7 +102,6 @@ export const getHistoriqueCompteRendu = async (req: Request, res: Response) => {
         id: true,
       },
     });
-
     return res.status(StatusCodes.OK).type("json").send(json(listHistorique));
   } catch (error) {
     console.error(error);
@@ -216,6 +215,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           addresse: suiviAgenda.nouv_adresse,
         },
       });
+
       const compterendutype = await db.compterendutype.create({
         data: {
           compterenduid: nouvelleCompteRendu.id,
@@ -269,6 +269,7 @@ export const createCompteRendu = async (req: Request, res: Response) => {
           observation: suiviAgenda.observation,
         },
       });
+
       const compterendutype = await db.compterendutype.create({
         data: {
           compterenduid: nouvelleCompteRendu.id,
@@ -322,62 +323,6 @@ export const createCompteRendu = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
-export const createCompteRend = async (req: Request, res: Response) => {
-  try {
-    const { user, suiviAgenda, compteRendu, cli, clientInjoignableId } =
-      req.body;
-
-    // Fetching the number of existing suivi_agenda entries for the specified client
-    const num = await db.suivi_agenda.count({
-      where: {
-        cli: cli,
-      },
-    });
-    // Creating the new compterendu entry
-    const newCompteRendu = await db.suivi_agenda.create({
-      data: {
-        //Assuming id is autoincremented and unique, you don't need to specify it
-        num: num + 1, // Incrementing num
-        cli: cli,
-        date_ag: new Date(), // Assuming you want the current date
-        compte_rendu: compteRendu,
-        usr_nom: user.role,
-        usr_matricule: user.matricule,
-      },
-    });
-
-    console.log(newCompteRendu);
-    return res.status(StatusCodes.OK).json(newCompteRendu);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
-  }
-};
-
-// export async function GetPokemons({
-//   search,
-//   offset = 0,
-//   limit = 20,
-// }: {
-//   search?: string | undefined
-//   offset?: number
-//   limit?: number
-// }) {
-//   const data = await prismadb.pokemon.findMany({
-//     where: { name: { contains: search } },
-//     skip: offset,
-//     take: limit,
-//   })
-
-//   const totalCount = await prismadb.pokemon.count({
-//     where: { name: { contains: search } },
-//   })
-//   const totalPages = Math.ceil(totalCount / limit)
-
-//   return { data, totalCount, totalPages }
-// }
 
 export const getCompteRenduById = async (req: Request, res: Response) => {
   try {
@@ -420,7 +365,6 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
           cli: true,
           compte_rendu: true,
           usr_nom: true,
-
           ab_client: {
             select: {
               id: true,
@@ -428,7 +372,6 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
               cli: true,
             },
           },
-
           compterendutype_compterendutype_compterenduidTosuivi_agenda: {
             select: {
               typeID: true,
@@ -438,7 +381,6 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
                   lieu_ver: true,
                 },
               },
-
               promesseregresse: {
                 select: {
                   mnt_reg: true,
@@ -469,6 +411,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
               },
 
               visiteId: true,
+              
               nouvellecoordonnees: {
                 select: {
                   nouv_te2: true,
@@ -478,6 +421,7 @@ export const getCompteRenduById = async (req: Request, res: Response) => {
               },
 
               nouvellecoordonneesID: true,
+   
               facilitePaimentId: true,
               FacilitePaiment: {
                 select: {
@@ -628,7 +572,6 @@ export const getAllCompteRendu = async (req: Request, res: Response) => {
       cli: true,
       compte_rendu: true,
       usr_nom: true,
-
       ab_client: {
         select: {
           nom: true,

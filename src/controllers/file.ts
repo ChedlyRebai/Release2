@@ -22,13 +22,3 @@ export const deleteFileById = async (req: Request, res: Response) => {
       .json({ message: "Internal Server Error" });
   }
 };
-
-export const downloadfile = async (req: Request, res: Response) => {
-  try {
-  } catch (error) {
-    console.error(error);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
-  }
-};

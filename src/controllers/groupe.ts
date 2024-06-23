@@ -5,12 +5,8 @@ import { json } from "../../public/utils";
 
 export const getGroup = async (req: Request, res: Response) => {
   try {
-    // const groupes = await db.ab_client.groupBy({
-    //   by: ["groupe"],
-    // });
     const groupes = await db.zone.findMany();
-    return res.status(StatusCodes.OK).type('json').send(json(groupes));
-   
+    return res.status(StatusCodes.OK).type("json").send(json(groupes));
   } catch (error) {
     console.error(error);
     res

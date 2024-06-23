@@ -70,16 +70,6 @@ export const getLettres = async (req: Request, res: Response) => {
     const agence = Number(req.query.agence) || 0;
     const from = Number(req.query.from) || 0;
     const to = Number(req.query.to) || 0;
-    console.log(
-      typeof user.matricule,
-      perPage,
-      page,
-      search,
-      agence,
-      group,
-      from,
-      to
-    );
 
     const clients = await getLettre(
       user.matricule,
@@ -164,9 +154,7 @@ const getLettre = async (
           {
             OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
           },
-          {
-            OR: [{ susp_lr: "N" }, { susp_lr: null }],
-          },
+
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
           { mnt_imp: { gte: montantLettreNumber } },
           { phase: "C" },
@@ -184,9 +172,7 @@ const getLettre = async (
           {
             OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
           },
-          {
-            OR: [{ susp_lr: "N" }, { susp_lr: null }],
-          },
+
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
 
           { mnt_imp: { gte: montantLettreNumber } },
@@ -206,9 +192,7 @@ const getLettre = async (
           {
             OR: [{ etat_lettre: null }, { etat_lettre: "N" }],
           },
-          {
-            OR: [{ susp_lr: "N" }, { susp_lr: null }],
-          },
+
           // { nombre_jours: { gte: jour.jour.toString(), lte: jourf.jourf.toString() } },
           //{ mnt_imp: { gte: montantLettreNumber } },
           { phase: "C" },
