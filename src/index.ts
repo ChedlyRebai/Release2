@@ -11,8 +11,7 @@ import "./controllers/cron"; // Import the cron module
 import moment from "moment";
 import alertsroute from "./routes/alerts";
 import "./controllers/mail";
-import generateAlerts from "./controllers/generateAlerts";
-import { cron } from "../src/controllers/cron";
+
 const app = express();
 
 app.use(
@@ -26,7 +25,7 @@ app.use(bodyParser.json());
 app.use("/client", clientroute);
 app.use("/compterendu", compterenduroute);
 app.use("/alerts", alertsroute);
-app.use("/cron", cron);
+
 const today = moment().toDate();
 
 console.log("today", today);
